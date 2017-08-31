@@ -1,0 +1,32 @@
+$color-green-opacity: rgba(0,154,0,0.7); // #009a00
+$color-red: #9a0000;
+$color-red-opacity: rgba(154,0,0,0.7); // #9a0000
+$color-orange: #cd6700;
+$color-lightgray: #ededed;
+
+// Global
+.banner-top-right{
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  border-radius: 5px;
+  color: white;
+  padding: 2px 4px;
+}
+.banner-top-right.minor{ background-color: $color-orange; }
+.banner-top-right.major{ background-color: $color-red; }
+
+.bordered { border-radius: 5px; padding: 10px 20px; position: relative; }
+.bordered.gray { border: 2px solid $color-lightgray; }
+.bordered.orange { border: 2px solid $color-orange; }
+.bordered.red { border: 2px solid $color-red; }
+section { margin: 45px 0px; }
+
+
+.operation-banner {
+  background-color: $color-green-opacity;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 5px;
+}
+.operation-banner.warn{ background-color: $color-red-opacity; }

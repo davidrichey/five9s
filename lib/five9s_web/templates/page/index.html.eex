@@ -1,0 +1,55 @@
+<div class='operation-banner'>
+  <i class='fa fa-check'></i> All Systems Operational
+</div>
+
+<div class='operation-banner warn' style='margin-top: 35px;'>
+  <b>Maintenance Scheduled!</b><br>
+  There is a maintence currently happening. Effected things:
+</div>
+
+
+<section>
+  <div class='about'>
+    <h3>About this site</h3>
+    Blah block blah blah
+  </div>
+</section>
+
+<section>
+  <h4>Active Incidents</h4>
+  <div class='bordered gray'>
+    No active incidents reported.
+  </div>
+</section>
+
+<section>
+  <h4>Uptime</h4>
+  <div class='bordered gray'>
+    Graph
+  </div>
+</section>
+
+<section>
+  <h4>External Services</h4>
+  <div class='bordered gray'>
+    <i class='fa fa-check'></i> Google Analytics
+    <i class='fa fa-check'></i> Facebook
+    <i class='fa fa-check'></i> Stripe
+  </div>
+</section>
+
+<section>
+  <h4>Scheduled Maintenance</h4>
+  <div class='bordered orange' style='margin-bottom: 5px'>
+    <div class='banner-top-right minor'>Minor</div>
+    Scheduled for: <br>
+    Components: <br>
+    Description: <br>
+  </div>
+  <div class='bordered red'>
+    <div class='banner-top-right major'>Major</div>
+    Scheduled for: <br>
+    Components: <br>
+    Description: <br>
+  </div>
+</section>
