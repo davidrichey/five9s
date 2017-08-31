@@ -1,0 +1,20 @@
+{
+  "maintenance": [
+    {
+      "name": "DB Cleanup",
+      "description": "We are investigating higher than usual response time",
+      "start_time": "2017-08-31 00:21:55",
+      "end_time": "2017-08-31 01:41:55",
+      "serverity": "minor",
+      "components": "Backend, API"
+    },
+    {
+      "name": "DB Reset",
+      "description": "We are investigating higher than usual response time",
+      "start_time": "2017-08-31 00:21:55",
+      "end_time": "2017-08-31 01:41:55",
+      "serverity": "major",
+      "components": "Backend, API"
+    }
+  ]
+}

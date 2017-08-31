@@ -58,5 +58,19 @@ exports.config = {
 
   npm: {
     enabled: true
+  },
+
+
+  sass: {
+    options: {
+      includePaths: ["node_modules/font-awesome/scss"], // Tell sass-brunch where to look for files to @import
+      precision: 8 // Minimum precision required by bootstrap-sass
+    }
+  },
+  paths: {
+    // Dependencies and current project directories to watch
+    watched: ["static", "css", "js", "vendor","scss"],
+    // Where to compile files to
+    public: "../priv/static"
   }
 };

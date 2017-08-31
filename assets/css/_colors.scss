@@ -1,0 +1,11 @@
+$color-green: #009a00;
+$color-green-opacity: rgba(0,154,0,0.7); // #009a00
+$color-red: #9a0000;
+$color-red-opacity: rgba(154,0,0,0.7); // #9a0000
+$color-orange: #cd6700;
+$color-lightgray: #ededed;
+
+.color-green { color: $color-green; }
+.color-lightgray { color: $color-lightgray; }
+.color-red { color: $color-red; }
+.color-orange { color: $color-orange; }

@@ -1,0 +1,16 @@
+{
+  "incidents": [
+    {
+      "title": "High Response Time",
+      "description": "We are investigating higher than usual response time",
+      "timestamp": "2017-08-31 00:21:55.685589Z",
+      "resolution_at": "2017-08-31 01:41:55.685589Z",
+      "resolution": "Nailed it"
+    },
+    {
+      "title": "High Response Time",
+      "description": "We are investigating higher than usual response time",
+      "timestamp": "2017-08-31 00:21:55.685589Z"
+    }
+  ]
+}

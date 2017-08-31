@@ -10,16 +10,35 @@
 
 <section>
   <div class='about'>
-    <h3>About this site</h3>
-    Blah block blah blah
+    <h3>About <%=assigns[:name]%></h3>
+    <%=assigns[:description]%>
   </div>
 </section>
 
 <section>
   <h4>Active Incidents</h4>
-  <div class='bordered gray'>
-    No active incidents reported.
-  </div>
+  <%= if assigns[:incidents] do %>
+    <%= for item <- assigns[:incidents] do %>
+      <div class='bordered gray <%= if item["resolution_at"], do: "resolved" %>' style='margin-bottom: 15px;'>
+        <b><%= item["title"] %></b><br>
+        <p><%= item["description"] %></p>
+        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
+
+        <%= if item["resolution_at"] do %>
+          <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
+          <%= if item["resolution"] do %>
+            <p>Resolution: <%=item["resolution"]%></p>
+          <% end %>
+        <% else %>
+          <div class='status-bottom-right'>Ongoing</div>
+        <% end %>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='bordered gray'>
+      No active incidents reported.
+    </div>
+  <% end %>
 </section>
 
 <section>
@@ -31,25 +50,28 @@
 
 <section>
   <h4>External Services</h4>
-  <div class='bordered gray'>
-    <i class='fa fa-check'></i> Google Analytics
-    <i class='fa fa-check'></i> Facebook
-    <i class='fa fa-check'></i> Stripe
+  <div class='bordered gray external-services'>
+    <div class='external-service'><i class='fa fa-check color-green'></i> Google Analytics</div>
+    <div class='external-service'><i class='fa fa-exclamation color-orange'></i> Facebook</div>
+    <div class='external-service'><i class='fa fa-close color-red'></i> Stripe</div>
   </div>
 </section>
 
 <section>
   <h4>Scheduled Maintenance</h4>
-  <div class='bordered orange' style='margin-bottom: 5px'>
-    <div class='banner-top-right minor'>Minor</div>
-    Scheduled for: <br>
-    Components: <br>
-    Description: <br>
-  </div>
-  <div class='bordered red'>
-    <div class='banner-top-right major'>Major</div>
-    Scheduled for: <br>
-    Components: <br>
-    Description: <br>
-  </div>
+  <%= if assigns[:maintenance] do %>
+    <%= for item <- assigns[:maintenance] do %>
+      <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
+        <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
+        <b><%= item["name"]%></b><br>
+        Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
+        Components: <%= item["components"] %><br>
+        Description: <%= item["description"] %><br>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='bordered gray'>
+      No schedueld maintenance reported.
+    </div>
+  <% end %>
 </section>

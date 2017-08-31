@@ -36,6 +36,7 @@ Malartu integration?
 ##### Scheduled Maintance
 Schedule: Start Time, End Time
 
-Services: Name, Description
+Services: Name, Description, Serverity
 
 ##### Subscriptions
+Eh
