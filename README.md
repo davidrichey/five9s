@@ -18,7 +18,10 @@ Five 9s is an idea to track your website or companies status, uptime and operati
 ##### Pings
 Minute by minute pings (HTTP requests) to an endpoint. Results: Success/Failure. (Uptime)
 
-Multiple endpoints: Name and URL
+####### TODO
+* Persist
+* Load from source
+* Alerting ??
 
 ##### External Services
 JSON parsing from S3 or URL to describe exteral services. Good/Warning/Bad. Refreshed hourly and by
@@ -39,4 +42,22 @@ Schedule: Start Time, End Time
 Services: Name, Description, Serverity
 
 ##### Subscriptions
-Eh
+Eh?
+
+
+### Docker
+* Add distillery
+* Add rel/
+* Endpoint server: true & secret_key_base
+
+
+###### TODO
+* How to on docker
+
+
+
+#### TODOs
+* See above for specifics
+* Tests
+* Clean up
+* Open source

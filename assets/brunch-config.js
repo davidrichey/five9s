@@ -2,7 +2,7 @@ exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
     javascripts: {
-      joinTo: "js/app.js"
+      joinTo: "js/app.js",
 
       // To use a separate vendor.js bundle, specify two files path
       // http://brunch.io/docs/config#-files-
@@ -12,15 +12,15 @@ exports.config = {
       // }
       //
       // To change the order of concatenation of files, explicitly mention here
-      // order: {
-      //   before: [
-      //     "vendor/js/jquery-2.1.1.js",
-      //     "vendor/js/bootstrap.min.js"
-      //   ]
-      // }
+      order: {
+        before: [
+          "vendor/js/jquery-3.2.1.js",
+          "vendor/js/jquery.flot.min.js"
+        ]
+      }
     },
     stylesheets: {
-      joinTo: "css/app.css"
+      joinTo: "css/app.scss"
     },
     templates: {
       joinTo: "js/app.js"
@@ -37,7 +37,7 @@ exports.config = {
   // Phoenix paths configuration
   paths: {
     // Dependencies and current project directories to watch
-    watched: ["static", "css", "js", "vendor"],
+    watched: ["static", "css", "js", "vendor", "scss"],
     // Where to compile files to
     public: "../priv/static"
   },
@@ -60,17 +60,16 @@ exports.config = {
     enabled: true
   },
 
-
   sass: {
     options: {
       includePaths: ["node_modules/font-awesome/scss"], // Tell sass-brunch where to look for files to @import
       precision: 8 // Minimum precision required by bootstrap-sass
-    }
+    },
+    mode: "native"
   },
-  paths: {
-    // Dependencies and current project directories to watch
-    watched: ["static", "css", "js", "vendor","scss"],
-    // Where to compile files to
-    public: "../priv/static"
+  copycat: {
+    "fonts": [
+      "node_modules/font-awesome/fonts"
+    ] // copy these files into priv/static/fonts/
   }
 };

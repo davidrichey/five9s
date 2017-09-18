@@ -3,6 +3,11 @@ defmodule Five9sWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"
-    assert html_response(conn, 200) =~ "Welcome to Phoenix!"
+    assert html_response(conn, 200)
+  end
+
+  test "GET /status", %{conn: conn} do
+    conn = get conn, "/status"
+    assert html_response(conn, 200)
   end
 end

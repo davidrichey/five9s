@@ -7,7 +7,7 @@ use Mix.Config
 # watchers to your application. For example, we use it
 # with brunch.io to recompile .js and .css sources.
 config :five9s, Five9sWeb.Endpoint,
-  http: [port: 4000],
+  http: [port: 4444],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
@@ -30,6 +30,10 @@ config :five9s, Five9sWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
+config :five9s,
+       configs: :yml # :yml, :s3
+      #  s3_bucket: "https://s3.amazonaws.com/" # required if configs == :s3
+
 # Watch static and templates for browser reloading.
 config :five9s, Five9sWeb.Endpoint,
   live_reload: [
@@ -41,8 +45,10 @@ config :five9s, Five9sWeb.Endpoint,
     ]
   ]
 
+log_level = System.get_env("LOG_LEVEL") || "info"
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+config :logger, :console, format: "[$level] $message\n",
+                level: String.to_atom(log_level)
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

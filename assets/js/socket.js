@@ -5,7 +5,7 @@
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/status/socket", {params: {}})
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -50,13 +50,51 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 //
 // Finally, pass the token on connect as below. Or remove it
 // from connect if you don't care about authentication.
-
 socket.connect()
+fetch_ping_data()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
+let channel = socket.channel("ping:API", {})
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("ok", resp => {})
   .receive("error", resp => { console.log("Unable to join", resp) })
 
+channel.onError(e => console.log("Something went wrong. Please refresh", e));
+channel.on("ping", msg => { fetch_ping_data() })
+
+
 export default socket
+
+function fetch_ping_data() {
+  $.get( "/status/uptime", function(res) {
+    $.each(res.uptimes, function(name, data) {
+      draw_graph_for(name, data);
+    });
+  });
+}
+
+function draw_graph_for(name, data) {
+  var el = $('#graphs #graph-'+name);
+  if(el.length === 0){
+    var html = '';
+    html += '<h6>'+name+'</h6>';
+    html += '<div id="graph-'+name+'" style="width:100%;height:100px;"></div>';
+    $('#graphs').append(html);
+  }
+  draw_graphs('#graph-'+name, data);
+}
+
+// Draw the graphs
+function draw_graphs(id, data) {
+  var opts = {
+    colors: ["#52A737"],
+    grid: { borderWidth: 1 },
+    series: {
+      lines: { show: true, fill: true, fillColor: "rgba(221,241,218, 0.5)" },
+      points: { show: true, radius: 1}
+    },
+    xaxis: { mode: "time", timeformat: "%H:%M" },
+    yaxis: { max: 100, min: 0, label: "test" }
+  };
+  $.plot($(id), [data], opts);
+}

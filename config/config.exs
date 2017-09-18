@@ -8,10 +8,9 @@ use Mix.Config
 # Configures the endpoint
 config :five9s, Five9sWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "uohpuIFdp4eGOshJUXPlh8YipyGvYPmJWuZXJzOiaglSoUQ4kKAxMeLwuxz+NdzC",
+  secret_key_base: "s3cr3t-k3y-b@ase",
   render_errors: [view: Five9sWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Five9s.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Five9s.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -12,5 +12,6 @@
   padding: 15px 25px;
   border-radius: 5px;
 }
-.operation-banner.warn{ background-color: $color-red-opacity; }
+.operation-banner.warn{ background-color: $color-orange-opacity; }
+.operation-banner.error{ background-color: $color-red-opacity; }
 .status-bottom-right{ position: absolute; bottom: 2px; right: 2px; font-size: 10px;}

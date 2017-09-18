@@ -20,7 +20,7 @@ defmodule Five9s.Mixfile do
   def application do
     [
       mod: {Five9s.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :httpoison]
     ]
   end
 
@@ -40,7 +40,12 @@ defmodule Five9s.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:poison, "~> 3.1.0"}
+      {:poison, "~> 3.1.0"},
+      {:httpoison, "~> 0.13"},
+      {:distillery, "~> 1.4.0"},
+
+      # Test
+      {:mock, "~> 0.2.0", only: :test}
     ]
   end
 
@@ -53,8 +58,7 @@ defmodule Five9s.Mixfile do
   defp aliases do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
-      "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      "ecto.reset": ["ecto.drop", "ecto.setup"]
     ]
   end
 end

@@ -1,4 +1,5 @@
 {
   "statusPageName": "Malartu",
-  "statusPageDescription": "Blah blah blah"
+  "statusPageDescription": "Status page for Malartu",
+  "image": "https://s3.amazonaws.com/platform-api/assets/malartu.png"
 }

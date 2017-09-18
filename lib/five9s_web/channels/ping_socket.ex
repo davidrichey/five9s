@@ -1,8 +1,8 @@
-defmodule Five9sWeb.UserSocket do
+defmodule Five9sWeb.PingSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", Five9sWeb.RoomChannel
+  channel "ping:*", Five9sWeb.PingChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

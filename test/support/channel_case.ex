@@ -26,11 +26,7 @@ defmodule Five9sWeb.ChannelCase do
   end
 
 
-  setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Five9s.Repo)
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Five9s.Repo, {:shared, self()})
-    end
+  setup _ do
     :ok
   end
 

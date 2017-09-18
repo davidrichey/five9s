@@ -6,18 +6,21 @@ defmodule Five9s.Supervisors.FetchSupervisor do
   end
 
   def init([]) do
-    children = [worker(Five9s.Workers.Fetcher, [], id: :one)]
+    children = [
+      worker(Five9s.Workers.Fetcher, [], id: :fetch),
+      worker(Five9s.Workers.Ping, [], id: :ping)
+    ]
     supervise(children, strategy: :one_for_one)
   end
 
-  def pid do
+  def pid(mod) do
     {_, pid, _, _} = Supervisor.which_children(__MODULE__)
-                     |> Enum.filter(fn(x) -> elem(x, 3) == [Five9s.Workers.Fetcher] end)
+                     |> Enum.filter(fn(x) -> elem(x, 3) == [mod] end)
                      |> Enum.at(0)
     pid
   end
 
-  def fetch do
-    pid() |> Five9s.Workers.Fetcher.config()
+  def fetch(mod) do
+    pid(mod) |> mod.config()
   end
 end

@@ -17,10 +17,11 @@ defmodule Five9sWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/status", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Five9sWeb do
-  #   pipe_through :api
-  # end
+  scope "/", Five9sWeb do
+    pipe_through :api
+    get "/status/uptime", UptimeController, :index
+  end
 end

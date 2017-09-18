@@ -8,7 +8,7 @@
     <meta name="author" content="">
 
     <title>Five9s</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/status/css/app.css") %>">
   </head>
 
   <body>
@@ -20,6 +20,11 @@
         <%= render @view_module, @view_template, assigns %>
       </main>
     </div> <!-- /container -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+
+    <script language="javascript" type="text/javascript" src="<%= static_path(@conn, "/status/js/jquery-3.2.1.min.js") %>"></script>
+    <script language="javascript" type="text/javascript" src="<%= static_path(@conn, "/status/js/flot/jquery.flot.js") %>"></script>
+    <script language="javascript" type="text/javascript" src="<%= static_path(@conn, "/status/js/flot/jquery.flot.time.js") %>"></script>
+
+    <script src="<%= static_path(@conn, "/status/js/app.js") %>"></script>
   </body>
 </html>

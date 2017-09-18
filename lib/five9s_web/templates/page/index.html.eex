@@ -1,12 +1,30 @@
-<div class='operation-banner'>
-  <i class='fa fa-check'></i> All Systems Operational
-</div>
+<%= case assigns[:status] do %>
+  <% "ok" -> %>
+    <div class='operation-banner'><i class='fa fa-check'></i> All Systems Operational</div>
+  <% "warn" -> %>
+    <div class='operation-banner warn'><i class='fa fa-exclamation'></i> Degraded Performance </div>
+  <% "error" -> %>
+    <div class='operation-banner error'><i class='fa fa-close'></i> System Outage</div>
+<% end %>
 
-<div class='operation-banner warn' style='margin-top: 35px;'>
-  <b>Maintenance Scheduled!</b><br>
-  There is a maintence currently happening. Effected things:
-</div>
+<%= if assigns[:image] != nil do %>
+ <img src='<%= assigns[:image] %>' style='width: 250px;margin: 10px 0px;'/>
+<% end %>
 
+<%= if length(assigns[:active_maintenance]) > 0 do %>
+  <section>
+    <h4>Active Maintenance</h4>
+    <%= for item <- assigns[:active_maintenance] do %>
+      <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
+        <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
+        <b><%= item["name"]%></b><br>
+        Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
+        Components: <%= item["components"] %><br>
+        Description: <%= item["description"] %><br>
+      </div>
+    <% end %>
+  </section>
+<% end %>
 
 <section>
   <div class='about'>
@@ -17,20 +35,69 @@
 
 <section>
   <h4>Active Incidents</h4>
+  <%= if length(assigns[:active_incidents]) > 0 do %>
+    <%= for item <- assigns[:active_incidents] do %>
+      <div class='bordered gray' style='margin-bottom: 15px;'>
+        <b><%= item["title"] %></b><br>
+        <p><%= item["description"] %></p>
+        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
+        <div class='status-bottom-right'>Ongoing</div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='bordered gray'>
+      No active incidents reported.
+    </div>
+  <% end %>
+</section>
+
+<%= if assigns[:pings] do %>
+  <section>
+    <h4>Uptime</h4>
+    <div class='bordered gray' id='graphs'>
+    </div>
+  </section>
+<% end %>
+
+<section>
+  <h4>External Services</h4>
+  <div class='bordered gray external-services'>
+    <%= for item <- assigns[:external_services] do %>
+
+      <div class='external-service'>
+
+        <%= case item["status"] do %>
+        <% "ok" -> %>
+          <i class='fa fa-check color-green'></i>
+        <% "delay" -> %>
+        <i class='fa fa-exclamation color-orange'></i>
+        <% "error" -> %>
+          <i class='fa fa-close color-red'></i>
+        <% end %>
+
+        <%= item["name"] %>
+      </div>
+    <% end %>
+  </div>
+  <div style='margin: 15px;font-size: 10px;'>
+    <i style='width: 15px' class='fa fa-check color-green'></i>- All systems functional<br>
+    <i style='width: 15px' class='fa fa-exclamation color-orange'></i>- Delay in connection<br>
+    <i style='width: 15px' class='fa fa-close color-red'></i>- Connection break
+  </div>
+</section>
+
+<section>
   <%= if assigns[:incidents] do %>
+    <h4>Previous Incidents</h4>
     <%= for item <- assigns[:incidents] do %>
-      <div class='bordered gray <%= if item["resolution_at"], do: "resolved" %>' style='margin-bottom: 15px;'>
+      <div class='bordered gray' style='margin-bottom: 15px;'>
         <b><%= item["title"] %></b><br>
         <p><%= item["description"] %></p>
         <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
 
-        <%= if item["resolution_at"] do %>
-          <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
-          <%= if item["resolution"] do %>
-            <p>Resolution: <%=item["resolution"]%></p>
-          <% end %>
-        <% else %>
-          <div class='status-bottom-right'>Ongoing</div>
+        <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
+        <%= if item["resolution"] do %>
+          <p>Resolution: <%=item["resolution"]%></p>
         <% end %>
       </div>
     <% end %>
@@ -41,37 +108,26 @@
   <% end %>
 </section>
 
-<section>
-  <h4>Uptime</h4>
-  <div class='bordered gray'>
-    Graph
-  </div>
-</section>
-
-<section>
-  <h4>External Services</h4>
-  <div class='bordered gray external-services'>
-    <div class='external-service'><i class='fa fa-check color-green'></i> Google Analytics</div>
-    <div class='external-service'><i class='fa fa-exclamation color-orange'></i> Facebook</div>
-    <div class='external-service'><i class='fa fa-close color-red'></i> Stripe</div>
-  </div>
-</section>
-
-<section>
-  <h4>Scheduled Maintenance</h4>
-  <%= if assigns[:maintenance] do %>
-    <%= for item <- assigns[:maintenance] do %>
-      <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
-        <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
-        <b><%= item["name"]%></b><br>
-        Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
-        Components: <%= item["components"] %><br>
-        Description: <%= item["description"] %><br>
+<%= if length(assigns[:maintenance]) > 0 do %>
+  <section>
+    <h4>Scheduled Maintenance</h4>
+    <%= if assigns[:maintenance] do %>
+      <%= for item <- assigns[:maintenance] do %>
+        <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
+          <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
+          <b><%= item["name"]%></b><br>
+          Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
+          Components: <%= item["components"] %><br>
+          Description: <%= item["description"] %><br>
+        </div>
+      <% end %>
+    <% else %>
+      <div class='bordered gray'>
+        No schedueld maintenance reported.
       </div>
     <% end %>
-  <% else %>
-    <div class='bordered gray'>
-      No schedueld maintenance reported.
-    </div>
-  <% end %>
-</section>
+  </section>
+<% end %>
+
+
+<!-- <div style='text-align:center'> Powered by open sourced Five9s</div> -->

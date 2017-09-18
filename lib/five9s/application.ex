@@ -10,9 +10,8 @@ defmodule Five9s.Application do
     children = [
       # Start the endpoint when the application starts
       supervisor(Five9sWeb.Endpoint, []),
-      supervisor(Five9s.Supervisors.FetchSupervisor, []),
       # Start your own worker by calling: Five9s.Worker.start_link(arg1, arg2, arg3)
-      # worker(Five9s.Worker, [arg1, arg2, arg3]),
+      supervisor(Five9s.Supervisors.FetchSupervisor, [])
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

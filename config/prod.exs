@@ -15,11 +15,20 @@ use Mix.Config
 # which you typically run after static files are built.
 config :five9s, Five9sWeb.Endpoint,
   load_from_system_env: true,
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  server: true,
+  check_origin: false,
+  secret_key_base: "${SECRET_KEY_BASE}"
+
+  # url: [host: "localhost", port: "4444"]
+  # cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
-config :logger, level: :info
+log_level = "${LOG_LEVEL}" || "debug"
+config :logger, level: String.to_atom(log_level)
+
+config :five9s,
+       configs: :s3, # :yml, :s3
+       s3_bucket: "${S3_BUCKET}" # required if configs == :s3
 
 # ## SSL Support
 #
@@ -61,4 +70,3 @@ config :logger, level: :info
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
