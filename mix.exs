@@ -44,6 +44,11 @@ defmodule Five9s.Mixfile do
       {:httpoison, "~> 0.13"},
       {:distillery, "~> 1.4.0"},
 
+      {:ex_aws, "~> 2.0"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:hackney, "~> 1.9"},
+      {:sweet_xml, "~> 0.6"},
+
       # Test
       {:mock, "~> 0.2.0", only: :test}
     ]

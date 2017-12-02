@@ -9,7 +9,7 @@ defmodule Five9s.Workers.Fetcher do
 
   def start_link do
     Logger.debug("Starting fetcher")
-    GenServer.start_link(__MODULE__, [])
+    GenServer.start_link(__MODULE__, [], [name: __MODULE__])
   end
 
   def config(pid), do: GenServer.call(pid, {:config})
@@ -39,6 +39,11 @@ defmodule Five9s.Workers.Fetcher do
       "external_services" => fetch_external_services()
     }
     {:noreply, state}
+  end
+
+  def handle_info({:update, map}, state) do
+    Logger.info "Updating #{Map.keys(map) |> Enum.join(", ")}"
+    {:noreply, Map.merge(state, map)}
   end
 
   @doc """
@@ -164,7 +169,7 @@ defmodule Five9s.Workers.Fetcher do
   defp fetch_s3(type) do
     case Application.fetch_env(:five9s, :s3_bucket) do
       {:ok, bucket} ->
-        case HTTPoison.get("#{bucket}/#{type}.json") do
+        case HTTPoison.get("https://s3.amazonaws.com/#{bucket}/#{type}.json") do
           {:ok, rsp} ->
             case rsp.status_code do
               200 -> rsp.body || "{\"#{type}\": []}"

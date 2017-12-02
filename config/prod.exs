@@ -28,7 +28,9 @@ config :logger, level: String.to_atom(log_level)
 
 config :five9s,
        configs: :s3, # :yml, :s3
-       s3_bucket: "${S3_BUCKET}" # required if configs == :s3
+       s3_bucket: "${S3_BUCKET}", # required if configs == :s3
+       admin_key: "${ADMIN_KEY}",
+       admin_verifier: "${ADMIN_VERIFIER}"
 
 # ## SSL Support
 #

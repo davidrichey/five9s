@@ -1,0 +1,40 @@
+<section>
+  <h4>External Services</h4>
+  <div class='bordered gray external-services'>
+    <%= for item <- assigns[:external_services] do %>
+
+      <div class='external-service'>
+
+        <%= case item["status"] do %>
+        <% "ok" -> %>
+          <i class='fa fa-check color-green'></i>
+        <% "delay" -> %>
+          <i class='fa fa-exclamation color-orange'></i>
+        <% "error" -> %>
+          <i class='fa fa-close color-red'></i>
+        <% end %>
+
+        <%= item["name"] %>
+
+
+        <%= link(to: "/status/admin/services?service=#{item["name"]}&value=ok&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"], style: "margin-left: 50px") do %>
+          <i class='fa fa-check color-green'></i>
+          ok
+        <% end %>
+        <%= link(to: "/status/admin/services?service=#{item["name"]}&value=delay&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"], style: "margin-left: 20px") do %>
+          <i class='fa fa-exclamation color-orange'></i>
+          delay
+        <% end %>
+        <%= link(to: "/status/admin/services?service=#{item["name"]}&value=error&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"], style: "margin-left: 20px") do %>
+          <i class='fa fa-close color-red'></i>
+          error
+        <% end %>
+      </div><br>
+    <% end %>
+  </div>
+  <div style='margin: 15px;font-size: 10px;'>
+    <i style='width: 15px' class='fa fa-check color-green'></i>- All systems functional<br>
+    <i style='width: 15px' class='fa fa-exclamation color-orange'></i>- Delay in connection<br>
+    <i style='width: 15px' class='fa fa-close color-red'></i>- Connection break
+  </div>
+</section>

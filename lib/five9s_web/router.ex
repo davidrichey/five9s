@@ -1,5 +1,6 @@
 defmodule Five9sWeb.Router do
   use Five9sWeb, :router
+  import Five9sWeb.Plugs.Admin
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -7,6 +8,15 @@ defmodule Five9sWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+  end
+
+  pipeline :admin do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :verfy_admin_request
   end
 
   pipeline :api do
@@ -18,6 +28,12 @@ defmodule Five9sWeb.Router do
 
     get "/", PageController, :index
     get "/status", PageController, :index
+  end
+
+  scope "/", Five9sWeb do
+    pipe_through :admin
+    get "/status/admin/services", AdminController, :services
+    post "/status/admin/services", AdminController, :update_service
   end
 
   scope "/", Five9sWeb do

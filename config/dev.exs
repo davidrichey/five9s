@@ -11,6 +11,7 @@ config :five9s, Five9sWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
+  secret_key_base: "12345hahs8df7ahs8d7fahs9dy7fby1ub234urb2oiu3h4foiuwehrf341u23nuio12h34781h248375h124857h",
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
@@ -31,8 +32,10 @@ config :five9s, Five9sWeb.Endpoint,
 # different ports.
 
 config :five9s,
-       configs: :yml # :yml, :s3
-      #  s3_bucket: "https://s3.amazonaws.com/" # required if configs == :s3
+       configs: :s3, # :yml, :s3
+       s3_bucket: System.get_env("S3_BUCKET"), # required if configs == :s3
+       admin_key: "admin",
+       admin_verifier: "verified"
 
 # Watch static and templates for browser reloading.
 config :five9s, Five9sWeb.Endpoint,
