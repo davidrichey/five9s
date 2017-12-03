@@ -1,7 +1,7 @@
 defmodule Five9sWeb.Plugs.Admin do
   def verfy_admin_request(conn, _) do
-    k = conn.params["key"] || ""
-    v = conn.params["verifier"] || ""
+    k = conn.params["key"] || get_in(conn.params, ["form", "key"]) || ""
+    v = conn.params["verifier"] || get_in(conn.params, ["form", "verifier"]) || ""
     cond do
       {Application.get_env(:five9s, :admin_key), Application.get_env(:five9s, :admin_verifier)} == {k, v} ->
         conn

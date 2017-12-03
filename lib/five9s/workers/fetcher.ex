@@ -65,7 +65,7 @@ defmodule Five9s.Workers.Fetcher do
   Fetches the Page configuration file
 
   ## Examples
-    iex> Fetcher.fetch_incidents()
+    iex> Fetcher.fetch_page()
     %{
       "statusPageName" => "Malartu",
       "statusPageDescription" => "Status page for Malartu",
@@ -113,7 +113,7 @@ defmodule Five9s.Workers.Fetcher do
       "description" => "We are investigating higher than usual response time",
       "start_time" => "2017-10-31T00:21:55Z",
       "end_time" => "2017-10-31T01:41:55Z",
-      "serverity" => "minor",
+      "severity" => "minor",
       "components" => "Backend, API"
     }]}
   """

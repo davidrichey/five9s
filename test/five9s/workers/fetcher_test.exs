@@ -40,9 +40,9 @@ defmodule Five9s.Workers.FetcherTest do
     })
 
     Application.put_env(:five9s, :configs, :s3)
-    Application.put_env(:five9s, :s3_bucket, "https://s3.amazonaws.com")
+    Application.put_env(:five9s, :s3_bucket, "test")
     with_mocks([
-      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/page.json") -> {:ok, %{body: json, status_code: 200}} end]},
+      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/test/page.json") -> {:ok, %{body: json, status_code: 200}} end]},
     ]) do
       page = Five9s.Workers.Fetcher.fetch_config("page")
       assert page == json
@@ -58,9 +58,9 @@ defmodule Five9s.Workers.FetcherTest do
 
   test "fetch_config - s3 - 404" do
     Application.put_env(:five9s, :configs, :s3)
-    Application.put_env(:five9s, :s3_bucket, "https://s3.amazonaws.com")
+    Application.put_env(:five9s, :s3_bucket, "test")
     with_mocks([
-      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/page.json") -> {:ok, %{status_code: 404}} end]},
+      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/test/page.json") -> {:ok, %{status_code: 404}} end]},
     ]) do
       page = Five9s.Workers.Fetcher.fetch_config("page")
       assert page == "{\"page\": []}"
@@ -69,9 +69,9 @@ defmodule Five9s.Workers.FetcherTest do
 
   test "fetch_config - s3 - error" do
     Application.put_env(:five9s, :configs, :s3)
-    Application.put_env(:five9s, :s3_bucket, "https://s3.amazonaws.com")
+    Application.put_env(:five9s, :s3_bucket, "test")
     with_mocks([
-      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/page.json") -> {:error, %{reason: 500}} end]},
+      {HTTPoison, [], [get: fn("https://s3.amazonaws.com/test/page.json") -> {:error, %{reason: 500}} end]},
     ]) do
       page = Five9s.Workers.Fetcher.fetch_config("page")
       assert page == "{\"page\": []}"

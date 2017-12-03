@@ -34,6 +34,10 @@ defmodule Five9sWeb.Router do
     pipe_through :admin
     get "/status/admin/services", AdminController, :services
     post "/status/admin/services", AdminController, :update_service
+
+    get "/status/admin/incidents", AdminController, :incidents
+    post "/status/admin/incident/resolve", AdminController, :resolve_incident
+    post "/status/admin/incident", AdminController, :new_incident
   end
 
   scope "/", Five9sWeb do
