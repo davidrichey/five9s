@@ -174,7 +174,7 @@ defmodule Five9s.Workers.Fetcher do
             case rsp.status_code do
               200 -> rsp.body || "{\"#{type}\": []}"
               code ->
-                Logger.error("Fetching Incidents gave status #{code}")
+                Logger.error("Fetching #{type} gave status #{code}")
                 "{\"#{type}\": []}"
             end
           {:error, rsp} ->

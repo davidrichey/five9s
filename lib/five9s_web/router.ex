@@ -38,6 +38,9 @@ defmodule Five9sWeb.Router do
     get "/status/admin/incidents", AdminController, :incidents
     post "/status/admin/incident/resolve", AdminController, :resolve_incident
     post "/status/admin/incident", AdminController, :new_incident
+
+    get "/status/admin/maintenance", AdminController, :maintenance
+    post "/status/admin/maintenance", AdminController, :new_maintenance
   end
 
   scope "/", Five9sWeb do
