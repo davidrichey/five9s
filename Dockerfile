@@ -25,7 +25,7 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-COPY --from=builder /app/_build/prod/rel/five9s/releases/0.0.1/five9s.tar.gz /app
+COPY --from=builder /app/_build/prod/rel/five9s/releases/0.0.2/five9s.tar.gz /app
 
 ENV MIX_ENV=prod REPLACE_OS_VARS=true
 
