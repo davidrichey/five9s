@@ -1,14 +1,12 @@
 # Five9s
 
-To start your Phoenix server:
+Setup
 
   * Install dependencies with `mix deps.get`
   * Install Node.js dependencies with `cd assets && npm install`
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+  * Setup your five9s configution see [configuring five9s](https://github.com/davidrichey/five9s/wiki/Confirguration)
+  * Run server with your env variables `AWS_ACCESS_KEY_ID=key AWS_SECRET_ACCESS_KEY=secret S3_BUCKET=bucket mix phx.server`
+ 
 
 ## Idea
 Five 9s is an idea to track your website or companies status, uptime and operations.
@@ -18,46 +16,32 @@ Five 9s is an idea to track your website or companies status, uptime and operati
 ##### Pings
 Minute by minute pings (HTTP requests) to an endpoint. Results: Success/Failure. (Uptime)
 
-####### TODO
-* Persist
-* Load from source
-* Alerting ??
+  * Send to [Malartu](https://www.malartu.co) to track your uptime metrics
+  * Send to Zapier to start a workflow
 
 ##### External Services
 JSON parsing from S3 or URL to describe exteral services. Good/Warning/Bad. Refreshed hourly and by
 
-##### Metrics
-Yes, no?
-
 ##### Incidents
-JSON parsing from S3 or URL to describe incidents. Refreshed hourly and by request
-
-##### Response Times
-How to read these. Where to get the data?
-Malartu integration?
+JSON parsing from S3 to describe incidents.
 
 ##### Scheduled Maintance
 Schedule: Start Time, End Time
 
 Services: Name, Description, Serverity
 
-##### Subscriptions
-Eh?
 
+### Admin Interface
 
-### Docker
-* Add distillery
-* Add rel/
-* Endpoint server: true & secret_key_base
+To access the admin interface to update your status page in the brower. You'll need to set two environment variables:
 
+* ADMIN_KEY
+* ADMIN_VERIFIER
 
-###### TODO
-* How to on docker
+You will use these to access the admin pages.
 
-
-
-#### TODOs
-* See above for specifics
-* Tests
-* Clean up
-* Open source
+```
+/status/admin/services?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+/status/admin/incidents?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+/status/admin/maintenance?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+```

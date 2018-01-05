@@ -1,0 +1,35 @@
+<section>
+  <h4>Incidents</h4>
+  <%= if length(assigns[:incidents]) > 0 do %>
+    <%= for item <- assigns[:incidents] do %>
+      <div class='bordered gray' style='margin-bottom: 15px;'>
+        <b><%= item["title"] %></b><br>
+        <p><%= item["description"] %></p>
+        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
+        <%= if item["resolution"] do %>
+          <p>Resolution: <%=item["resolution"]%></p>
+          <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
+        <% else %>
+          <div class='status-bottom-right'>
+            Ongoing |
+            <%= link('Resole', to: "/status/admin/incident/resolve?timestamp=#{item["timestamp"]}&resolve=true&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"]) %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+
+  <%= form_for @conn, admin_path(@conn, :new_incident), [as: :form], fn f -> %>
+    <label>
+      Title: <%= text_input f, :title %>
+    </label><br>
+
+    <label>
+      Description: <%= text_input f, :description %>
+    </label><br>
+
+    <%= hidden_input f, :key, [value: assigns[:key]] %>
+    <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+    <%= submit "Submit" %>
+  <% end %>
+</section>

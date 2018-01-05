@@ -1,0 +1,47 @@
+  <section>
+    <h4>Scheduled Maintenance</h4>
+    <%= if length(assigns[:maintenance]) > 0 do %>
+      <%= for item <- assigns[:maintenance] do %>
+        <div class='bordered <%= item["severity"] %>' style="margin-bottom: 5px">
+          <div class="banner-top-right <%= item["severity"] %>"><%= item["severity"] %></div>
+          <b><%= item["name"]%></b><br>
+          Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
+          Components: <%= item["components"] %><br>
+          Description: <%= item["description"] %><br>
+          Active: <%= item["active"] %><br>
+          Severity: <%= item["severity"] %><br>
+        </div>
+      <% end %>
+    <% else %>
+      <div class="bordered gray">
+        No schedueld maintenance reported.
+      </div>
+    <% end %>
+
+    <div class="bordered gray" style="margin-top: 15px">
+      Schedule Maintenance:<br>
+      <%= form_for @conn, admin_path(@conn, :new_maintenance), [as: :form], fn f -> %>
+        <label style="width: 150px">Name:</label>
+        <%= text_input f, :name %><br>
+
+        <label style="width: 150px">Description:</label>
+        <%= text_input f, :description %><br>
+
+        <label style="width: 150px">Start Time (UTC):</label>
+        <%= text_input f, :start_time, placeholder: "2017-12-01T04:00:00Z" %><br>
+
+        <label style="width: 150px">End Time (UTC):</label>
+        <%= text_input f, :end_time, placeholder: "2017-12-01T05:00:00Z" %><br>
+
+        <label style="width: 150px">Severity: </label>
+        <%= select f, :severity, ["minor", "major"] %><br>
+
+        <label style="width: 150px">Components:</label>
+        <%= text_input f, :components, placeholder: "API, Backend" %><br>
+
+        <%= hidden_input f, :key, [value: assigns[:key]] %>
+        <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+        <%= submit "Submit" %>
+      <% end %>
+    </div>
+  </section>

@@ -9,7 +9,7 @@ defmodule Five9s.Workers.Fetcher do
 
   def start_link do
     Logger.debug("Starting fetcher")
-    GenServer.start_link(__MODULE__, [])
+    GenServer.start_link(__MODULE__, [], [name: __MODULE__])
   end
 
   def config(pid), do: GenServer.call(pid, {:config})
@@ -41,6 +41,11 @@ defmodule Five9s.Workers.Fetcher do
     {:noreply, state}
   end
 
+  def handle_info({:update, map}, state) do
+    Logger.info "Updating #{Map.keys(map) |> Enum.join(", ")}"
+    {:noreply, Map.merge(state, map)}
+  end
+
   @doc """
   Fetches the External Services configuration file
 
@@ -60,7 +65,7 @@ defmodule Five9s.Workers.Fetcher do
   Fetches the Page configuration file
 
   ## Examples
-    iex> Fetcher.fetch_incidents()
+    iex> Fetcher.fetch_page()
     %{
       "statusPageName" => "Malartu",
       "statusPageDescription" => "Status page for Malartu",
@@ -108,7 +113,7 @@ defmodule Five9s.Workers.Fetcher do
       "description" => "We are investigating higher than usual response time",
       "start_time" => "2017-10-31T00:21:55Z",
       "end_time" => "2017-10-31T01:41:55Z",
-      "serverity" => "minor",
+      "severity" => "minor",
       "components" => "Backend, API"
     }]}
   """
@@ -164,12 +169,12 @@ defmodule Five9s.Workers.Fetcher do
   defp fetch_s3(type) do
     case Application.fetch_env(:five9s, :s3_bucket) do
       {:ok, bucket} ->
-        case HTTPoison.get("#{bucket}/#{type}.json") do
+        case HTTPoison.get("https://s3.amazonaws.com/#{bucket}/#{type}.json") do
           {:ok, rsp} ->
             case rsp.status_code do
               200 -> rsp.body || "{\"#{type}\": []}"
               code ->
-                Logger.error("Fetching Incidents gave status #{code}")
+                Logger.error("Fetching #{type} gave status #{code}")
                 "{\"#{type}\": []}"
             end
           {:error, rsp} ->

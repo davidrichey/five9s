@@ -31,3 +31,4 @@ script
 config/five9s/*.json
 node_modules
 *.DS_Store
+server

@@ -15,10 +15,10 @@
   <section>
     <h4>Active Maintenance</h4>
     <%= for item <- assigns[:active_maintenance] do %>
-      <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
-        <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
+      <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
+        <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
         <b><%= item["name"]%></b><br>
-        Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
+        Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
         Components: <%= item["components"] %><br>
         Description: <%= item["description"] %><br>
       </div>
@@ -113,10 +113,10 @@
     <h4>Scheduled Maintenance</h4>
     <%= if assigns[:maintenance] do %>
       <%= for item <- assigns[:maintenance] do %>
-        <div class='bordered <%= item["serverity"] %>' style='margin-bottom: 5px'>
-          <div class='banner-top-right <%= item["serverity"] %>'><%= item["serverity"] %></div>
+        <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
+          <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
           <b><%= item["name"]%></b><br>
-          Scheduled for: <%= item["start_time"] %> - <%= item["start_time"] %><br>
+          Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
           Components: <%= item["components"] %><br>
           Description: <%= item["description"] %><br>
         </div>
