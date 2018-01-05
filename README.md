@@ -31,3 +31,17 @@ Schedule: Start Time, End Time
 Services: Name, Description, Serverity
 
 
+### Admin Interface
+
+To access the admin interface to update your status page in the brower. You'll need to set two environment variables:
+
+* ADMIN_KEY
+* ADMIN_VERIFIER
+
+You will use these to access the admin pages.
+
+```
+/status/admin/services?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+/status/admin/incidents?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+/status/admin/maintenance?key=ADMIN_KEY&verifier=ADMIN_VERIFIER
+```

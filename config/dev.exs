@@ -11,7 +11,7 @@ config :five9s, Five9sWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  secret_key_base: "12345hahs8df7ahs8d7fahs9dy7fby1ub234urb2oiu3h4foiuwehrf341u23nuio12h34781h248375h124857h",
+  secret_key_base: :crypto.strong_rand_bytes(200) |> Base.url_encode64 |> binary_part(0, 200),
   watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
                     cd: Path.expand("../assets", __DIR__)]]
 
