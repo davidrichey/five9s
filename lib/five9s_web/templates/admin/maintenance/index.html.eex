@@ -7,7 +7,8 @@
           <b><%= item["name"]%></b><br>
           Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
           Components: <%= item["components"] %><br>
-          Description: <%= item["description"] %><br>
+          Description: <%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %><br>
+
           Active: <%= item["active"] %><br>
           Severity: <%= item["severity"] %><br>
         </div>
@@ -20,12 +21,12 @@
 
     <div class="bordered gray" style="margin-top: 15px">
       Schedule Maintenance:<br>
-      <%= form_for @conn, admin_path(@conn, :new_maintenance), [as: :form], fn f -> %>
+      <%= form_for @conn, maintenance_path(@conn, :create), [as: :form], fn f -> %>
         <label style="width: 150px">Name:</label>
         <%= text_input f, :name %><br>
 
         <label style="width: 150px">Description:</label>
-        <%= text_input f, :description %><br>
+        <%= textarea f, :description %><br>
 
         <label style="width: 150px">Start Time (UTC):</label>
         <%= text_input f, :start_time, placeholder: "2017-12-01T04:00:00Z" %><br>
