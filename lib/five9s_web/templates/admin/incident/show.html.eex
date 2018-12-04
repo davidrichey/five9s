@@ -1,0 +1,29 @@
+<%= render Five9sWeb.AdminView, "_nav.html", key: assigns[:key], verifier: assigns[:verifier] %>
+<%= render Five9sWeb.PageView, "_incident.html", item: assigns[:incident], admin: true, key: assigns[:key], verifier: assigns[:verifier] %>
+
+<div class="form-half">
+  <h5>Add an Update:</h5>
+  <%= form_for @conn, incident_path(@conn, :update, assigns[:incident]["timestamp"]), [as: :form], fn f -> %>
+    <label>
+      Description: <%= textarea f, :description %>
+    </label><br>
+
+    <%= hidden_input f, :key, [value: assigns[:key]] %>
+    <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+    <%= submit "Submit", class: "btn" %>
+  <% end %>
+</div>
+
+
+<div class="form-half">
+  <h5>Resolve the issue:</h5>
+  <%= form_for @conn, incident_path(@conn, :resolve, assigns[:incident]["timestamp"]), [as: :form], fn f -> %>
+    <label>
+      Description: <%= textarea f, :description %>
+    </label><br>
+
+    <%= hidden_input f, :key, [value: assigns[:key]] %>
+    <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+    <%= submit "Submit", class: "btn" %>
+  <% end %>
+</div>

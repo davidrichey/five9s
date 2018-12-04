@@ -37,12 +37,7 @@
   <h4>Active Incidents</h4>
   <%= if length(assigns[:active_incidents]) > 0 do %>
     <%= for item <- assigns[:active_incidents] do %>
-      <div class='bordered gray' style='margin-bottom: 15px;'>
-        <b><%= item["title"] %></b><br>
-        <p><%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %></p>
-        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
-        <div class='status-bottom-right'>Ongoing</div>
-      </div>
+      <%= render Five9sWeb.PageView, "_incident.html", item: item, border: 'orange' %>
     <% end %>
   <% else %>
     <div class='bordered gray'>
@@ -90,16 +85,7 @@
   <%= if assigns[:incidents] do %>
     <h4>Previous Incidents</h4>
     <%= for item <- assigns[:incidents] do %>
-      <div class='bordered gray' style='margin-bottom: 15px;'>
-        <b><%= item["title"] %></b><br>
-        <p><%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %></p>
-        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
-
-        <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
-        <%= if item["resolution"] do %>
-          <p>Resolution: <%=item["resolution"]%></p>
-        <% end %>
-      </div>
+      <%= render Five9sWeb.PageView, "_incident.html", item: item, border: 'gray' %>
     <% end %>
   <% else %>
     <div class='bordered gray'>
@@ -113,6 +99,7 @@
     <h4>Scheduled Maintenance</h4>
     <%= if assigns[:maintenance] do %>
       <%= for item <- assigns[:maintenance] do %>
+        <%= render Five9sWeb.PageView, "_maintenance.html", item: item %>
         <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
           <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
           <b><%= item["name"]%></b><br>

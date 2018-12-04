@@ -33,14 +33,17 @@ defmodule Five9sWeb.Router do
 
   scope "/", Five9sWeb do
     pipe_through(:admin)
+    post("/status/admin/service", Admin.ServiceController, :create)
     get("/status/admin/services", Admin.ServiceController, :index)
     post("/status/admin/services", Admin.ServiceController, :update)
-    post("/status/admin/service", Admin.ServiceController, :create)
+    delete("/status/admin/services", Admin.ServiceController, :delete)
 
     get("/status/admin/incidents", Admin.IncidentController, :index)
-    post("/status/admin/incident/resolve", Admin.IncidentController, :update)
+    get("/status/admin/incidents/:id", Admin.IncidentController, :show)
     post("/status/admin/incident", Admin.IncidentController, :create)
-    delete("/status/admin/incident", Admin.IncidentController, :delete)
+    delete("/status/admin/incidents/:id", Admin.IncidentController, :delete)
+    post("/status/admin/incident/:id/resolve", Admin.IncidentController, :resolve)
+    post("/status/admin/incidents/:id", Admin.IncidentController, :update)
 
     get("/status/admin/maintenance", Admin.MaintenanceController, :index)
     post("/status/admin/maintenance", Admin.MaintenanceController, :create)

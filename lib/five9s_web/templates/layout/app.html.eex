@@ -7,8 +7,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Five9s</title>
+    <title><%=assigns[:name]%> Status Page</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/status/css/app.css") %>">
+    <link rel="icon" href="<%=assigns[:favicon]%>"/>
   </head>
 
   <body>

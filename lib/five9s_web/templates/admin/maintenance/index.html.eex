@@ -1,48 +1,40 @@
-  <section>
-    <h4>Scheduled Maintenance</h4>
-    <%= if length(assigns[:maintenance]) > 0 do %>
-      <%= for item <- assigns[:maintenance] do %>
-        <div class='bordered <%= item["severity"] %>' style="margin-bottom: 5px">
-          <div class="banner-top-right <%= item["severity"] %>"><%= item["severity"] %></div>
-          <b><%= item["name"]%></b><br>
-          Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
-          Components: <%= item["components"] %><br>
-          Description: <%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %><br>
-
-          Active: <%= item["active"] %><br>
-          Severity: <%= item["severity"] %><br>
-        </div>
-      <% end %>
-    <% else %>
-      <div class="bordered gray">
-        No schedueld maintenance reported.
-      </div>
+<%= render Five9sWeb.AdminView, "_nav.html", key: assigns[:key], verifier: assigns[:verifier] %>
+<section>
+  <h4>Scheduled Maintenance</h4>
+  <%= if length(assigns[:maintenance]) > 0 do %>
+    <%= for item <- assigns[:maintenance] do %>
+      <%= render Five9sWeb.PageView, "_maintenance.html", item: item, admin: true %>
     <% end %>
-
-    <div class="bordered gray" style="margin-top: 15px">
-      Schedule Maintenance:<br>
-      <%= form_for @conn, maintenance_path(@conn, :create), [as: :form], fn f -> %>
-        <label style="width: 150px">Name:</label>
-        <%= text_input f, :name %><br>
-
-        <label style="width: 150px">Description:</label>
-        <%= textarea f, :description %><br>
-
-        <label style="width: 150px">Start Time (UTC):</label>
-        <%= text_input f, :start_time, placeholder: "2017-12-01T04:00:00Z" %><br>
-
-        <label style="width: 150px">End Time (UTC):</label>
-        <%= text_input f, :end_time, placeholder: "2017-12-01T05:00:00Z" %><br>
-
-        <label style="width: 150px">Severity: </label>
-        <%= select f, :severity, ["minor", "major"] %><br>
-
-        <label style="width: 150px">Components:</label>
-        <%= text_input f, :components, placeholder: "API, Backend" %><br>
-
-        <%= hidden_input f, :key, [value: assigns[:key]] %>
-        <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
-        <%= submit "Submit" %>
-      <% end %>
+  <% else %>
+    <div class="bordered gray">
+      No schedueld maintenance reported.
     </div>
-  </section>
+  <% end %>
+
+  <div class="bordered gray" style="margin-top: 15px">
+    Schedule Maintenance:<br>
+    <%= form_for @conn, maintenance_path(@conn, :create), [as: :form], fn f -> %>
+      <label style="width: 150px">Name:</label>
+      <%= text_input f, :name %><br>
+
+      <label style="width: 150px">Description:</label>
+      <%= textarea f, :description %><br>
+
+      <label style="width: 150px">Start Time (UTC):</label>
+      <%= datetime_select f, :start_time, seconds: [], default: DateTime.utc_now() %><br>
+
+      <label style="width: 150px">End Time (UTC):</label>
+      <%= datetime_select f, :end_time, seconds: [], default: DateTime.utc_now() %><br>
+
+      <label style="width: 150px">Severity: </label>
+      <%= select f, :severity, ["minor", "major"] %><br>
+
+      <label style="width: 150px">Components:</label>
+      <%= text_input f, :components, placeholder: "API,Backend" %><br>
+
+      <%= hidden_input f, :key, [value: assigns[:key]] %>
+      <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+      <%= submit "Submit", class: "btn" %>
+    <% end %>
+  </div>
+</section>

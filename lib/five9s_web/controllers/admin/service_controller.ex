@@ -59,4 +59,21 @@ defmodule Five9sWeb.Admin.ServiceController do
       verifier: params["verifier"]
     })
   end
+
+  def delete(conn, params = %{"service" => s}) do
+    config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
+    external_services = get_in(config, ["external_services"]) || []
+    services = Enum.filter(external_services, fn %{"name" => n} -> n != s end)
+
+    Logger.debug("External Services Updated: #{inspect(services)}")
+    json = %{"external_services" => services}
+    Process.send(Five9s.Workers.Fetcher, {:update, json}, [])
+    Five9s.S3.put_object(%{json: json, name: "external_services"})
+
+    render(conn, "index.html", %{
+      external_services: services,
+      key: params["key"],
+      verifier: params["verifier"]
+    })
+  end
 end

@@ -36,7 +36,40 @@ defmodule Five9sWeb.Admin.IncidentController do
     render(conn, "index.html", %{incidents: incidents, key: k, verifier: v})
   end
 
-  def update(conn, params = %{"timestamp" => timestamp}) do
+  def show(conn, %{"id" => id, "key" => k, "verifier" => v}) do
+    config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
+
+    case (get_in(config, ["incidents"]) || []) |> Enum.find(fn i -> i["timestamp"] == id end) do
+      nil ->
+        render(conn, Five9sWeb.ErrorView, "404.html")
+
+      incident ->
+        render(conn, "show.html", %{incident: incident, key: k, verifier: v})
+    end
+  end
+
+  def delete(conn, params = %{"id" => timestamp}) do
+    config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
+    incidents = get_in(config, ["incidents"]) || []
+
+    incidents =
+      incidents
+      |> Enum.filter(fn i ->
+        i["timestamp"] != timestamp
+      end)
+
+    Logger.debug("Incidents updated: #{inspect(incidents)}")
+    json = %{"incidents" => incidents}
+    Process.send(Five9s.Workers.Fetcher, {:update, json}, [])
+    Five9s.S3.put_object(%{json: json, name: "incidents"})
+
+    redirect(
+      conn,
+      to: incident_path(conn, :index, key: params["key"], verifier: params["verifier"])
+    )
+  end
+
+  def resolve(conn, params = %{"id" => timestamp, "form" => %{"description" => description}}) do
     config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
     incidents = get_in(config, ["incidents"]) || []
 
@@ -46,7 +79,7 @@ defmodule Five9sWeb.Admin.IncidentController do
           true ->
             Map.merge(i, %{
               "resolution_at" => DateTime.utc_now() |> DateTime.to_iso8601(),
-              "resolution" => "Resolved"
+              "resolution" => description || "Resolved"
             })
 
           _ ->
@@ -65,32 +98,56 @@ defmodule Five9sWeb.Admin.IncidentController do
     Process.send(Five9s.Workers.Fetcher, {:update, json}, [])
     Five9s.S3.put_object(%{json: json, name: "incidents"})
 
-    render(conn, "index.html", %{
-      incidents: incidents,
-      key: params["key"],
-      verifier: params["verifier"]
-    })
+    redirect(
+      conn,
+      to:
+        incident_path(
+          conn,
+          :index,
+          key: params["form"]["key"],
+          verifier: params["form"]["verifier"]
+        )
+    )
   end
 
-  def delete(conn, params = %{"timestamp" => timestamp}) do
+  def update(conn, params = %{"id" => timestamp, "form" => %{"description" => description}}) do
     config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
     incidents = get_in(config, ["incidents"]) || []
 
+    update = %{
+      "update_at" => DateTime.utc_now() |> DateTime.to_iso8601(),
+      "update" => description
+    }
+
     incidents =
-      incidents
-      |> Enum.filter(fn i ->
-        i["timestamp"] != timestamp
+      Enum.map(incidents, fn i = %{"timestamp" => ts} ->
+        case timestamp == ts do
+          true ->
+            IO.inspect("HERE")
+            updates = i["updates"] || []
+            IO.inspect(Map.merge(i, %{"updates" => updates ++ [update]}))
+            Map.merge(i, %{"updates" => updates ++ [update]})
+
+          _ ->
+            i
+        end
       end)
 
-    Logger.debug("Incidents updated: #{inspect(incidents)}")
+    Logger.debug("Incident has an update: #{inspect(update)} #{inspect(incidents)}")
     json = %{"incidents" => incidents}
     Process.send(Five9s.Workers.Fetcher, {:update, json}, [])
     Five9s.S3.put_object(%{json: json, name: "incidents"})
 
-    render(conn, "index.html", %{
-      incidents: incidents,
-      key: params["key"],
-      verifier: params["verifier"]
-    })
+    redirect(
+      conn,
+      to:
+        incident_path(
+          conn,
+          :show,
+          timestamp,
+          key: params["form"]["key"],
+          verifier: params["form"]["verifier"]
+        )
+    )
   end
 end

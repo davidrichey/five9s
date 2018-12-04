@@ -15,6 +15,13 @@ defmodule Five9sWeb.Admin.MaintenanceController do
     mtnce =
       Map.take(obj, ["name", "description", "start_time", "end_time", "severity", "components"])
 
+    mtnce =
+      mtnce
+      |> Map.merge(%{
+        "start_time" => time_from_select(mtnce["start_time"]),
+        "end_time" => time_from_select(mtnce["end_time"])
+      })
+
     mtnce = Map.merge(mtnce, %{"timestamp" => DateTime.utc_now() |> DateTime.to_string()})
 
     maintenance =
@@ -41,10 +48,15 @@ defmodule Five9sWeb.Admin.MaintenanceController do
     Process.send(Five9s.Workers.Fetcher, {:update, json}, [])
     Five9s.S3.put_object(%{json: json, name: "maintenance"})
 
-    render(conn, "index.html", %{
-      maintenance: maintenance,
-      key: obj["key"],
-      verifier: obj["verifier"]
-    })
+    redirect(conn, to: maintenance_path(conn, :index, key: obj["key"], verifier: obj["verifier"]))
+  end
+
+  defp time_from_select(t) do
+    year = t["year"]
+    month = t["month"] |> String.pad_leading(2, "0")
+    day = t["day"] |> String.pad_leading(2, "0")
+    hour = t["hour"] |> String.pad_leading(2, "0")
+    minute = t["minute"] |> String.pad_leading(2, "0")
+    "#{year}-#{month}-#{day} #{hour}:#{minute}:00Z"
   end
 end
