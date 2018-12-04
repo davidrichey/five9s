@@ -4,7 +4,7 @@
     <%= for item <- assigns[:incidents] do %>
       <div class='bordered gray' style='margin-bottom: 15px;'>
         <b><%= item["title"] %></b><br>
-        <p><%= item["description"] %></p>
+        <p><%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %></p>
         <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
         <%= if item["resolution"] do %>
           <p>Resolution: <%=item["resolution"]%></p>
@@ -12,20 +12,21 @@
         <% else %>
           <div class='status-bottom-right'>
             Ongoing |
-            <%= link('Resole', to: "/status/admin/incident/resolve?timestamp=#{item["timestamp"]}&resolve=true&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"]) %>
+            <%= link('Resolve', to: "/status/admin/incident/resolve?timestamp=#{item["timestamp"]}&resolve=true&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"]) %> |
+            <%= link('Delete', to: "/status/admin/incident?timestamp=#{item["timestamp"]}&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :delete, data: [confirm: "Are you sure?"]) %>
           </div>
         <% end %>
       </div>
     <% end %>
   <% end %>
 
-  <%= form_for @conn, admin_path(@conn, :new_incident), [as: :form], fn f -> %>
+  <%= form_for @conn, incident_path(@conn, :create), [as: :form], fn f -> %>
     <label>
       Title: <%= text_input f, :title %>
     </label><br>
 
     <label>
-      Description: <%= text_input f, :description %>
+      Description: <%= textarea f, :description %>
     </label><br>
 
     <%= hidden_input f, :key, [value: assigns[:key]] %>

@@ -37,4 +37,14 @@
     <i style='width: 15px' class='fa fa-exclamation color-orange'></i>- Delay in connection<br>
     <i style='width: 15px' class='fa fa-close color-red'></i>- Connection break
   </div>
+
+  <%= form_for @conn, service_path(@conn, :create), [as: :form], fn f -> %>
+    <label>
+      Name: <%= text_input f, :name %>
+    </label><br>
+
+    <%= hidden_input f, :key, [value: assigns[:key]] %>
+    <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
+    <%= submit "Submit" %>
+  <% end %>
 </section>
