@@ -19,3 +19,27 @@
 .bordered.major { border: 2px solid $color-red; }
 .bordered.resolved { border: 2px solid $color-green; }
 section { margin: 45px 0px; }
+
+.form-half {
+  display: inline-block;
+  margin: 5px 0px;
+  width: 49%;
+  min-width: 200px;
+}
+
+button, button.btn {
+  background-color: $color-green;
+  border: 0px;
+  border-radius: 5px;
+  padding: 5px 10px;
+  box-shadow: 0px 0px 5px rgba(100,100,100,0.5);
+  color: white;
+}
+input[type="text"] { border: 1px solid $color-gray; font-weight: 400; }
+textarea, textarea#form_description {
+  padding: 2px 5px;
+  border: 1px solid $color-gray;
+  border-radius: 4px;
+  background-color: white;
+  font-weight: 400;
+}

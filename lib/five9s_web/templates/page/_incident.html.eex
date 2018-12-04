@@ -1,0 +1,29 @@
+<div class='bordered <%=assigns[:border] || "gray"%>' style='margin-bottom: 15px;'>
+  <b><%= assigns[:item]["title"] %></b><br>
+  <p><%= raw(assigns[:item]["description"] |> String.split("\n") |> Enum.join("<br>")) %></p>
+  <p style='font-size:10px'>Reported at: <%= assigns[:item]["timestamp"] %></p>
+  <div class="updates">
+    <%= for update <- (assigns[:item]["updates"] || []) do %>
+      <div class="updates">
+        <b>Update</b> - <%= raw(update["update"] |> String.split("\n") |> Enum.join("<br>"))%>
+        <div class="update_at">
+          Updated at: <%= update["update_at"] %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= if assigns[:item]["resolution"] do %>
+    <p>Resolution: <%=assigns[:item]["resolution"]%></p>
+    <div class='status-bottom-right'>Resolved at: <%=assigns[:item]["resolution_at"]%></div>
+  <% else %>
+    <div class='status-bottom-right'>Ongoing</div>
+  <% end %>
+
+  <%=if assigns[:admin] do %>
+    <div class='status-top-right'>
+      <%= link('Delete', to: "/status/admin/incidents/#{assigns[:item]["timestamp"]}?key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :delete, data: [confirm: "Are you sure?"]) %> | 
+      <%= link('Show', to: "/status/admin/incidents/#{assigns[:item]["timestamp"]}?key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :get) %>
+    </div>
+  <% end %>
+</div>

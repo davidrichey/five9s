@@ -1,25 +1,12 @@
+<%= render Five9sWeb.AdminView, "_nav.html", key: assigns[:key], verifier: assigns[:verifier] %>
+
 <section>
   <h4>Incidents</h4>
   <%= if length(assigns[:incidents]) > 0 do %>
     <%= for item <- assigns[:incidents] do %>
-      <div class='bordered gray' style='margin-bottom: 15px;'>
-        <b><%= item["title"] %></b><br>
-        <p><%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %></p>
-        <p style='font-size:10px'>Reported at: <%= item["timestamp"] %></p>
-        <%= if item["resolution"] do %>
-          <p>Resolution: <%=item["resolution"]%></p>
-          <div class='status-bottom-right'>Resolved at: <%=item["resolution_at"]%></div>
-        <% else %>
-          <div class='status-bottom-right'>
-            Ongoing |
-            <%= link('Resolve', to: "/status/admin/incident/resolve?timestamp=#{item["timestamp"]}&resolve=true&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :post, data: [confirm: "Are you sure?"]) %> |
-            <%= link('Delete', to: "/status/admin/incident?timestamp=#{item["timestamp"]}&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :delete, data: [confirm: "Are you sure?"]) %>
-          </div>
-        <% end %>
-      </div>
+      <%= render Five9sWeb.PageView, "_incident.html", item: item, admin: true, key: assigns[:key], verifier: assigns[:verifier] %>
     <% end %>
   <% end %>
-
   <%= form_for @conn, incident_path(@conn, :create), [as: :form], fn f -> %>
     <label>
       Title: <%= text_input f, :title %>
@@ -31,6 +18,6 @@
 
     <%= hidden_input f, :key, [value: assigns[:key]] %>
     <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
-    <%= submit "Submit" %>
+    <%= submit "Submit", class: "btn" %>
   <% end %>
 </section>

@@ -1,3 +1,4 @@
+<%= render Five9sWeb.AdminView, "_nav.html", key: assigns[:key], verifier: assigns[:verifier] %>
 <section>
   <h4>External Services</h4>
   <div class='bordered gray external-services'>
@@ -29,6 +30,10 @@
           <i class='fa fa-close color-red'></i>
           error
         <% end %>
+
+        <%= link(to: "/status/admin/services?service=#{item["name"]}&key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :delete, data: [confirm: "Are you sure?"], style: "margin-left: 20px;font-size: 10px") do %>
+          delete
+        <% end %>
       </div><br>
     <% end %>
   </div>
@@ -45,6 +50,6 @@
 
     <%= hidden_input f, :key, [value: assigns[:key]] %>
     <%= hidden_input f, :verifier, [value: assigns[:verifier]] %>
-    <%= submit "Submit" %>
+    <%= submit "Submit", class: 'btn' %>
   <% end %>
 </section>
