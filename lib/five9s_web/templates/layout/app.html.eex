@@ -10,6 +10,7 @@
     <title><%=assigns[:name]%> Status Page</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/status/css/app.css") %>">
     <link rel="icon" href="<%=assigns[:favicon]%>"/>
+
   </head>
 
   <body>

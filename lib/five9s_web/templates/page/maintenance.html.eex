@@ -1,0 +1,5 @@
+<%= render Five9sWeb.PageView, "_banner.html", status: assigns[:status], image: assigns[:image] %>
+<div style="margin-top: 50px">
+  <h4>Maintenance</h4>
+  <%= render Five9sWeb.PageView, "_maintenance.html", item: assigns[:maintenance] %>
+</div>

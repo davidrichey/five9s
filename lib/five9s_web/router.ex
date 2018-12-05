@@ -29,6 +29,7 @@ defmodule Five9sWeb.Router do
 
     get("/", PageController, :index)
     get("/status", PageController, :index)
+    get("/status/m/:id", PageController, :maintenance)
   end
 
   scope "/", Five9sWeb do

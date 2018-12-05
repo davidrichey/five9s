@@ -9,10 +9,11 @@ defmodule Five9s.Workers.Fetcher do
 
   def start_link do
     Logger.debug("Starting fetcher")
-    GenServer.start_link(__MODULE__, [], [name: __MODULE__])
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
 
   def config(pid), do: GenServer.call(pid, {:config})
+
   def handle_call({:config}, _from, config) do
     {:reply, config, config}
   end
@@ -20,7 +21,7 @@ defmodule Five9s.Workers.Fetcher do
   def schedule_next_run do
     Process.send_after(self(), {:fetch}, schedule_at())
 
-    Logger.info "Scheduling in #{schedule_at()} ms"
+    Logger.info("Scheduling in #{schedule_at()} ms")
   end
 
   def schedule_at do
@@ -30,7 +31,8 @@ defmodule Five9s.Workers.Fetcher do
 
   def handle_info({:fetch}, _s) do
     schedule_next_run()
-    Logger.info "Fetching"
+    Logger.info("Fetching")
+
     state = %{
       "page" => fetch_page(),
       "incidents" => fetch_incidents(),
@@ -38,11 +40,12 @@ defmodule Five9s.Workers.Fetcher do
       "pings" => fetch_pings(),
       "external_services" => fetch_external_services()
     }
+
     {:noreply, state}
   end
 
   def handle_info({:update, map}, state) do
-    Logger.info "Updating #{Map.keys(map) |> Enum.join(", ")}"
+    Logger.info("Updating #{Map.keys(map) |> Enum.join(", ")}")
     {:noreply, Map.merge(state, map)}
   end
 
@@ -57,7 +60,7 @@ defmodule Five9s.Workers.Fetcher do
   """
   def fetch_external_services do
     txt = fetch_config("external_services")
-    Logger.debug txt
+    Logger.debug(txt)
     Poison.decode!(txt)["external_services"]
   end
 
@@ -75,7 +78,7 @@ defmodule Five9s.Workers.Fetcher do
   """
   def fetch_page do
     txt = fetch_config("page")
-    Logger.debug txt
+    Logger.debug(txt)
     Poison.decode!(txt)
   end
 
@@ -94,12 +97,13 @@ defmodule Five9s.Workers.Fetcher do
   """
   def fetch_incidents do
     txt = fetch_config("incidents")
-    Logger.debug txt
+    Logger.debug(txt)
+
     (Poison.decode!(txt)["incidents"] || [])
-    |> Enum.sort_by(fn(i) -> i["timestamp"] end)
+    |> Enum.sort_by(fn i -> i["timestamp"] end)
     |> Enum.reverse()
-    |> Enum.map(fn(i) ->
-      Map.merge(i, %{ "active" => i["resolution_at"] == nil })
+    |> Enum.map(fn i ->
+      Map.merge(i, %{"active" => i["resolution_at"] == nil})
     end)
   end
 
@@ -120,20 +124,26 @@ defmodule Five9s.Workers.Fetcher do
   def fetch_maintenance do
     txt = fetch_config("maintenance")
 
-    Logger.debug txt
-    all = (Poison.decode!(txt)["maintenance"] || [])
-    |> Enum.map(fn(i) ->
-      now = DateTime.utc_now()
-      {:ok, st, _} = DateTime.from_iso8601(i["start_time"])
-      {:ok, et, _} = DateTime.from_iso8601(i["end_time"])
-      stc = DateTime.compare(st, now)
-      etc = DateTime.compare(et, now)
-      Map.merge(i, %{
-        "active" => Enum.member?([:lt, :eq], stc) && Enum.member?([:gt, :eq], etc),
-        "relevant" => Enum.member?([:gt, :eq], stc) || Enum.member?([:gt, :eq], etc)
-      })
-    end)
-    Enum.filter(all, fn(a) -> a["relevant"] end)
+    Logger.debug(txt)
+
+    all =
+      (Poison.decode!(txt)["maintenance"] || [])
+      |> Enum.map(fn i ->
+        now = DateTime.utc_now()
+        {:ok, st, _} = DateTime.from_iso8601(i["start_time"])
+        {:ok, et, _} = DateTime.from_iso8601(i["end_time"])
+        stc = DateTime.compare(st, now)
+        etc = DateTime.compare(et, now)
+        id = i["id"] || Five9s.Application.random_string()
+
+        Map.merge(i, %{
+          "active" => Enum.member?([:lt, :eq], stc) && Enum.member?([:gt, :eq], etc),
+          "relevant" => Enum.member?([:gt, :eq], stc) || Enum.member?([:gt, :eq], etc),
+          "id" => id
+        })
+      end)
+
+    Enum.filter(all, fn a -> a["relevant"] end)
   end
 
   @doc """
@@ -147,10 +157,9 @@ defmodule Five9s.Workers.Fetcher do
   """
   def fetch_pings do
     txt = fetch_config("pings")
-    Logger.debug txt
+    Logger.debug(txt)
     Poison.decode!(txt)["pings"] || []
   end
-
 
   @doc """
   Fetches the configuration file based off of keys set
@@ -160,7 +169,8 @@ defmodule Five9s.Workers.Fetcher do
   def fetch_config(type) do
     case Application.fetch_env(:five9s, :configs) do
       {:ok, :yml} ->
-        File.read!("#{File.cwd!}/config/five9s/#{type}.json")
+        File.read!("#{File.cwd!()}/config/five9s/#{type}.json")
+
       {:ok, :s3} ->
         fetch_s3(type)
     end
@@ -172,15 +182,19 @@ defmodule Five9s.Workers.Fetcher do
         case HTTPoison.get("https://s3.amazonaws.com/#{bucket}/#{type}.json") do
           {:ok, rsp} ->
             case rsp.status_code do
-              200 -> rsp.body || "{\"#{type}\": []}"
+              200 ->
+                rsp.body || "{\"#{type}\": []}"
+
               code ->
                 Logger.error("Fetching #{type} gave status #{code}")
                 "{\"#{type}\": []}"
             end
+
           {:error, rsp} ->
             Logger.error("Fetching Incidents error: #{rsp.reason}")
             "{\"#{type}\": []}"
         end
+
       _ ->
         Logger.error("Fetching Incidents error: no s3_bucket variable")
         "{\"#{type}\": []}"

@@ -7,6 +7,14 @@
   color: white;
   padding: 2px 4px;
 }
+.banner-bottom-right{
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  border-radius: 5px;
+  color: white;
+  padding: 2px 4px;
+}
 .banner-top-right.minor{ background-color: $color-orange; }
 .banner-top-right.major{ background-color: $color-red; }
 

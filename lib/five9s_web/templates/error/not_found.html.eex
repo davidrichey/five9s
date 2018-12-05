@@ -1,0 +1,10 @@
+<div>
+  <%= link(to: "/status") do %>
+    <i class='fas fa-home'></i>
+    Head Home
+  <% end %>
+</div>
+
+<div style="margin: 50px">
+  404 Not Found
+</div>

@@ -123,9 +123,7 @@ defmodule Five9sWeb.Admin.IncidentController do
       Enum.map(incidents, fn i = %{"timestamp" => ts} ->
         case timestamp == ts do
           true ->
-            IO.inspect("HERE")
             updates = i["updates"] || []
-            IO.inspect(Map.merge(i, %{"updates" => updates ++ [update]}))
             Map.merge(i, %{"updates" => updates ++ [update]})
 
           _ ->

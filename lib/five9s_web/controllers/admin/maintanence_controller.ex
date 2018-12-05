@@ -18,6 +18,7 @@ defmodule Five9sWeb.Admin.MaintenanceController do
     mtnce =
       mtnce
       |> Map.merge(%{
+        "id" => Five9s.Application.random_string(),
         "start_time" => time_from_select(mtnce["start_time"]),
         "end_time" => time_from_select(mtnce["end_time"])
       })

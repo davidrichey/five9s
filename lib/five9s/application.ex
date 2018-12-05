@@ -26,4 +26,8 @@ defmodule Five9s.Application do
     Five9sWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  def random_string(l \\ 25) do
+    :crypto.strong_rand_bytes(l) |> Base.url_encode64() |> binary_part(0, l)
+  end
 end

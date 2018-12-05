@@ -1,10 +1,10 @@
 <%= case assigns[:status] do %>
   <% "ok" -> %>
-    <div class='operation-banner'><i class='fa fa-check'></i> All Systems Operational</div>
+    <div class='operation-banner'><i class='fas fa-check'></i> All Systems Operational</div>
   <% "warn" -> %>
-    <div class='operation-banner warn'><i class='fa fa-exclamation'></i> Degraded Performance </div>
+    <div class='operation-banner warn'><i class="fas fa-exclamation"></i> Degraded Performance </div>
   <% "error" -> %>
-    <div class='operation-banner error'><i class='fa fa-close'></i> System Outage</div>
+    <div class='operation-banner error'><i class='fas fa-times'></i> System Outage</div>
 <% end %>
 
 <%= if assigns[:image] != nil do %>
@@ -15,13 +15,7 @@
   <section>
     <h4>Active Maintenance</h4>
     <%= for item <- assigns[:active_maintenance] do %>
-      <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
-        <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
-        <b><%= item["name"]%></b><br>
-        Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
-        Components: <%= item["components"] %><br>
-        Description: <%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %><br>
-      </div>
+      <%= render Five9sWeb.PageView, "_maintenance.html", item: item %>
     <% end %>
   </section>
 <% end %>
@@ -63,11 +57,11 @@
 
         <%= case item["status"] do %>
         <% "ok" -> %>
-          <i class='fa fa-check color-green'></i>
+          <i class='fas fa-check color-green'></i>
         <% "delay" -> %>
-        <i class='fa fa-exclamation color-orange'></i>
+        <i class='fas fa-exclamation color-orange'></i>
         <% "error" -> %>
-          <i class='fa fa-close color-red'></i>
+          <i class='fas fa-times color-red'></i>
         <% end %>
 
         <%= item["name"] %>
@@ -75,9 +69,9 @@
     <% end %>
   </div>
   <div style='margin: 15px;font-size: 10px;'>
-    <i style='width: 15px' class='fa fa-check color-green'></i>- All systems functional<br>
-    <i style='width: 15px' class='fa fa-exclamation color-orange'></i>- Delay in connection<br>
-    <i style='width: 15px' class='fa fa-close color-red'></i>- Connection break
+    <i style='width: 15px' class='fas fa-check color-green'></i>- All systems functional<br>
+    <i style='width: 15px' class='fas fa-exclamation color-orange'></i>- Delay in connection<br>
+    <i style='width: 15px' class='fas fa-times color-red'></i>- Connection break
   </div>
 </section>
 
@@ -100,13 +94,6 @@
     <%= if assigns[:maintenance] do %>
       <%= for item <- assigns[:maintenance] do %>
         <%= render Five9sWeb.PageView, "_maintenance.html", item: item %>
-        <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
-          <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
-          <b><%= item["name"]%></b><br>
-          Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
-          Components: <%= item["components"] %><br>
-          Description: <%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %><br>
-        </div>
       <% end %>
     <% else %>
       <div class='bordered gray'>
