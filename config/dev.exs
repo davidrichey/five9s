@@ -11,9 +11,16 @@ config :five9s, Five9sWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  secret_key_base: :crypto.strong_rand_bytes(200) |> Base.url_encode64 |> binary_part(0, 200),
-  watchers: [node: ["node_modules/brunch/bin/brunch", "watch", "--stdin",
-                    cd: Path.expand("../assets", __DIR__)]]
+  secret_key_base: :crypto.strong_rand_bytes(200) |> Base.url_encode64() |> binary_part(0, 200),
+  watchers: [
+    node: [
+      "node_modules/webpack/bin/webpack.js",
+      "--mode",
+      "development",
+      "--watch-stdin",
+      cd: Path.expand("../assets", __DIR__)
+    ]
+  ]
 
 # ## SSL Support
 #
@@ -32,10 +39,12 @@ config :five9s, Five9sWeb.Endpoint,
 # different ports.
 
 config :five9s,
-       configs: :s3, # :yml, :s3
-       s3_bucket: System.get_env("S3_BUCKET"), # required if configs == :s3
-       admin_key: "admin",
-       admin_verifier: "verified"
+  # :yml, :s3
+  configs: :s3,
+  # required if configs == :s3
+  s3_bucket: System.get_env("S3_BUCKET"),
+  admin_key: "admin",
+  admin_verifier: "verified"
 
 # Watch static and templates for browser reloading.
 config :five9s, Five9sWeb.Endpoint,
@@ -50,8 +59,9 @@ config :five9s, Five9sWeb.Endpoint,
 
 log_level = System.get_env("LOG_LEVEL") || "info"
 # Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n",
-                level: String.to_atom(log_level)
+config :logger, :console,
+  format: "[$level] $message\n",
+  level: String.to_atom(log_level)
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.

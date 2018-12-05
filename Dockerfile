@@ -9,8 +9,7 @@ ENV MIX_ENV=prod
 RUN mix do deps.get, deps.compile
 
 RUN npm install
-RUN cd assets && brunch build --production && cd ../ && \
-    mix do compile, phoenix.digest
+RUN mix do compile, phoenix.digest
 
 RUN mix release
 
