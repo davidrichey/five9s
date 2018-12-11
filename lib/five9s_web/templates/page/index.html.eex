@@ -100,13 +100,6 @@
     <%= if assigns[:maintenance] do %>
       <%= for item <- assigns[:maintenance] do %>
         <%= render Five9sWeb.PageView, "_maintenance.html", item: item %>
-        <div class='bordered <%= item["severity"] %>' style='margin-bottom: 5px'>
-          <div class='banner-top-right <%= item["severity"] %>'><%= item["severity"] %></div>
-          <b><%= item["name"]%></b><br>
-          Scheduled for: <%= item["start_time"] %> - <%= item["end_time"] %><br>
-          Components: <%= item["components"] %><br>
-          Description: <%= raw(item["description"] |> String.split("\n") |> Enum.join("<br>")) %><br>
-        </div>
       <% end %>
     <% else %>
       <div class='bordered gray'>
