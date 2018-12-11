@@ -40,4 +40,32 @@ defmodule Five9sWeb.PageController do
       status: status
     )
   end
+
+  def maintenance(conn, params) do
+    config = Five9s.Supervisors.FetchSupervisor.fetch(Five9s.Workers.Fetcher)
+    maintenances = get_in(config, ["maintenance"]) || []
+    incidents = get_in(config, ["incidents"]) || []
+    active_incidents = Enum.filter(incidents, fn x -> x["active"] end)
+    active_maintenance = Enum.filter(maintenances, fn x -> x["active"] end)
+
+    status =
+      case {length(active_maintenance), length(active_incidents)} do
+        {0, 0} -> "ok"
+        _ -> "warn"
+      end
+
+    case maintenances |> Enum.find(fn m -> m["id"] == params["id"] end) do
+      nil ->
+        conn
+        |> Plug.Conn.put_status(401)
+        |> Phoenix.Controller.render(Five9sWeb.ErrorView, "not_found.html")
+
+      maintenance ->
+        render(conn, "maintenance.html", %{
+          maintenance: maintenance,
+          status: status,
+          image: get_in(config, ["page", "image"])
+        })
+    end
+  end
 end

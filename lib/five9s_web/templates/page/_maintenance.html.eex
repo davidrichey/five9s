@@ -9,6 +9,8 @@
   </div>
   <div class="description"><%= raw(assigns[:item]["description"] |> String.split("\n") |> Enum.join("<br>")) %></div>
 
+  <div class='banner-bottom-right' style="font-size: 12px;"><%= link('view', to: "/status/m/#{assigns[:item]["id"]}") %></div>
+
   <%= if assigns[:admin] do %>
     Active: <%= assigns[:item]["active"] %><br>
     Severity: <%= assigns[:item]["severity"] %><br>
