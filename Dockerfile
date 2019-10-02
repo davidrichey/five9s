@@ -9,8 +9,7 @@ ENV MIX_ENV=prod
 RUN mix do deps.get, deps.compile
 
 RUN npm install
-RUN cd assets && brunch build --production && cd ../ && \
-    mix do compile, phoenix.digest
+RUN mix do compile, phoenix.digest
 
 RUN mix release
 
@@ -25,7 +24,7 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-COPY --from=builder /app/_build/prod/rel/five9s/releases/0.0.2/five9s.tar.gz /app
+COPY --from=builder /app/_build/prod/rel/five9s/releases/0.0.3/five9s.tar.gz /app
 
 ENV MIX_ENV=prod REPLACE_OS_VARS=true
 
