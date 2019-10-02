@@ -1,4 +1,0 @@
-<%= link('Incidents', to: "/status/admin/incidents?key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :get) %> |
-<%= link('Maintenance', to: "/status/admin/maintenance?key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :get) %> |
-<%= link('Services', to: "/status/admin/services?key=#{assigns[:key]}&verifier=#{assigns[:verifier]}", method: :get) %> | 
-<%= link('Status', to: "/status", method: :get) %>

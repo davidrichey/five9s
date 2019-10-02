@@ -20,26 +20,28 @@ defmodule Five9sWeb do
   def controller do
     quote do
       use Phoenix.Controller, namespace: Five9sWeb
+
       import Plug.Conn
-      import Five9sWeb.Router.Helpers
       import Five9sWeb.Gettext
+      alias Five9sWeb.Router.Helpers, as: Routes
     end
   end
 
   def view do
     quote do
-      use Phoenix.View, root: "lib/five9s_web/templates",
-                        namespace: Five9sWeb
+      use Phoenix.View,
+        root: "lib/five9s_web/templates",
+        namespace: Five9sWeb
 
       # Import convenience functions from controllers
-      import Phoenix.Controller, only: [get_flash: 2, view_module: 1]
+      import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
 
       # Use all HTML functionality (forms, tags, etc)
       use Phoenix.HTML
 
-      import Five9sWeb.Router.Helpers
       import Five9sWeb.ErrorHelpers
       import Five9sWeb.Gettext
+      alias Five9sWeb.Router.Helpers, as: Routes
     end
   end
 

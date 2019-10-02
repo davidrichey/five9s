@@ -1,11 +1,14 @@
 // NOTE: The contents of this file will only be executed if
 // you uncomment its entry in "assets/js/app.js".
 
-// To use Phoenix channels, the first step is to import Socket
-// and connect at the socket path in "lib/web/endpoint.ex":
+// To use Phoenix channels, the first step is to import Socket,
+// and connect at the socket path in "lib/web/endpoint.ex".
+//
+// Pass the token on params as below. Or remove it
+// from the params if you are not using authentication.
 import {Socket} from "phoenix"
 
-let socket = new Socket("/status/socket", {params: {}})
+let socket = new Socket("/socket", {params: {token: window.userToken}})
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -35,10 +38,10 @@ let socket = new Socket("/status/socket", {params: {}})
 //
 //     <script>window.userToken = "<%= assigns[:user_token] %>";</script>
 //
-// You will need to verify the user token in the "connect/2" function
+// You will need to verify the user token in the "connect/3" function
 // in "lib/web/channels/user_socket.ex":
 //
-//     def connect(%{"token" => token}, socket) do
+//     def connect(%{"token" => token}, socket, _connect_info) do
 //       # max_age: 1209600 is equivalent to two weeks in seconds
 //       case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
 //         {:ok, user_id} ->
@@ -48,53 +51,13 @@ let socket = new Socket("/status/socket", {params: {}})
 //       end
 //     end
 //
-// Finally, pass the token on connect as below. Or remove it
-// from connect if you don't care about authentication.
+// Finally, connect to the socket:
 socket.connect()
-fetch_ping_data()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("ping:API", {})
+let channel = socket.channel("topic:subtopic", {})
 channel.join()
-  .receive("ok", resp => {})
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 
-channel.onError(e => console.log("Something went wrong. Please refresh", e));
-channel.on("ping", msg => { fetch_ping_data() })
-
-
 export default socket
-
-function fetch_ping_data() {
-  $.get( "/status/uptime", function(res) {
-    $.each(res.uptimes, function(name, data) {
-      draw_graph_for(name, data);
-    });
-  });
-}
-
-function draw_graph_for(name, data) {
-  var el = $('#graphs #graph-'+name);
-  if(el.length === 0){
-    var html = '';
-    html += '<h6>'+name+'</h6>';
-    html += '<div id="graph-'+name+'" style="width:100%;height:100px;"></div>';
-    $('#graphs').append(html);
-  }
-  draw_graphs('#graph-'+name, data);
-}
-
-// Draw the graphs
-function draw_graphs(id, data) {
-  var opts = {
-    colors: ["#52A737"],
-    grid: { borderWidth: 1 },
-    series: {
-      lines: { show: true, fill: true, fillColor: "rgba(221,241,218, 0.5)" },
-      points: { show: true, radius: 1}
-    },
-    xaxis: { mode: "time", timeformat: "%H:%M" },
-    yaxis: { max: 100, min: 0, label: "test" }
-  };
-  $.plot($(id), [data], opts);
-}
