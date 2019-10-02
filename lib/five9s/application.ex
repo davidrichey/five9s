@@ -9,7 +9,7 @@ defmodule Five9s.Application do
     # List all child processes to be supervised
     children = [
       # Start the Ecto repository
-      Five9s.Repo,
+      # Five9s.Repo,
       # Start the endpoint when the application starts
       Five9sWeb.Endpoint
       # Starts a worker by calling: Five9s.Worker.start_link(arg)
