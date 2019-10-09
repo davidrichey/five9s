@@ -13,6 +13,6 @@ defmodule Five9s.Incident.Update do
   def changeset(incident, params) do
     incident
     |> cast(params, [:description])
-    |> Five9s.Repo.cast_id()
+    |> Five9s.Repo.cast_defaults()
   end
 end

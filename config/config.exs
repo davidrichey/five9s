@@ -7,15 +7,18 @@
 # General application configuration
 use Mix.Config
 
-config :five9s,
-  ecto_repos: [Five9s.Repo]
+# config :five9s,
+#   ecto_repos: []
 
 # Configures the endpoint
 config :five9s, Five9sWeb.Endpoint,
   url: [host: "localhost"],
+  # TODO: Move to secret
   secret_key_base: "HG0+/heBHk7Mz+FD0r9/z7G46U9YK4payR2hHVI0sKEZufLPCiuZKv2XX5oxMO1G",
   render_errors: [view: Five9sWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Five9s.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Five9s.PubSub, adapter: Phoenix.PubSub.PG2],
+  # TODO: Move to secret
+  live_view: [signing_salt: "mDL1jpi9XsBRyBDJQMUH0ImFb1tumCsC"]
 
 # Configures Elixir's Logger
 config :logger, :console,

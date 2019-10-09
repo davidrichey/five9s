@@ -1,0 +1,31 @@
+<div class="incident <%= if @resource.resolution[:id], do: "resolved", else: "open" %>">
+  <div class="name"><%= @resource.name %></div>
+  <div class="description"><%= @resource.description %></div>
+  <%= if @resource.resolution[:id] do %>
+    <div class="resolution">Resolved at <%= @resource.resolution.created_at %>: <%= @resource.resolution.description %></div>
+  <% end %>
+  <%= if @resource.updates |> Enum.count() > 0 do %>
+    <div class="updates">
+      <%= for update <- @resource.updates do %>
+        <div class="update">
+          <%= update.description %>
+          <%= update.updated_at %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+
+
+    <form action="#" phx-submit="update">
+      <%= text_input :update, :description, placeholder: "Update...." %>
+      <%= submit "Update", phx_disable_with: "Updating..." %>
+    </form>
+
+    <form action="#" phx-submit="resolve">
+      <%= text_input :resolution, :description, placeholder: "Resolution" %>
+      <%= submit "Resolve", phx_disable_with: "Updating..." %>
+    </form>
+  </div>
+</div>

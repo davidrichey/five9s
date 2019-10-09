@@ -5,22 +5,33 @@ defmodule Five9sWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
+    plug Phoenix.LiveView.Flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
 
-  pipeline :api do
-    plug :accepts, ["json"]
+  pipeline :admin do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug Phoenix.LiveView.Flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
   end
 
   scope "/", Five9sWeb do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/incidents/:id", Admin.IncidentController, :show
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", Five9sWeb do
-  #   pipe_through :api
-  # end
+  scope "/admin", Five9sWeb do
+    pipe_through :admin
+
+    get "/incidents/new", Admin.IncidentController, :new
+    post "/incidents", Admin.IncidentController, :create
+    get "/incidents", Admin.IncidentController, :index
+    get "/incidents/:id", Admin.IncidentController, :show
+  end
 end

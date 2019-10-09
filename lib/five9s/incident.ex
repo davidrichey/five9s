@@ -3,19 +3,21 @@ defmodule Five9s.Incident do
   import Ecto.Changeset
 
   @primary_key false
-  schema "" do
+  schema "incidents" do
     field :id
     field :created_at, :utc_datetime
     field :updated_at, :utc_datetime
     field :name
-    field :updates, {:array, :map}
-    field :resolution, :map
+    field :description
+    field :updates, {:array, :map}, default: []
+    field :resolution, :map, default: %{}
   end
 
   def changeset(incident, params) do
     incident
-    |> cast(params, [:name, :resolution])
-    |> Five9s.Repo.cast_id()
+    |> cast(params, [:name, :description, :resolution])
+    |> validate_required([:name])
+    |> Five9s.Repo.cast_defaults()
   end
 end
 

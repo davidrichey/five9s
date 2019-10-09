@@ -2,3 +2,32 @@
 
 @import "./phoenix.css";
 @import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
+
+$green: green;
+$orange: orange;
+$red: red;
+$gray: gray;
+$lightgray: lightgray;
+
+.systemStatus {
+  padding: 8px 16px;
+  border-radius: 4px;
+  &.statusok { background-color: $green; color: white; }
+  &.statusdegraded { background-color: $orange; color: white; }
+}
+
+
+.incident {
+  padding: 8px 16px;
+  border: 1px solid $lightgray;
+  border-top: 4px solid $orange;
+  &.resolved { border-top: 4px solid $green; }
+  font-size: 14px;
+  .name {
+    font-size: 15px;
+  }
+
+  .updates {
+    padding: 8px 0px;
+  }
+}
