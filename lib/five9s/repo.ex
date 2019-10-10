@@ -1,6 +1,11 @@
 defmodule Five9s.Repo do
   import Ecto.Changeset
 
+  def all(module, _query \\ %{}) do
+    path = path(module.__struct__.__meta__)
+    Five9s.Status.all(path)
+  end
+
   def insert(changeset, _opts \\ []) do
     case changeset.valid? do
       false ->
@@ -43,6 +48,18 @@ defmodule Five9s.Repo do
 
   def get(module, id) do
     Five9s.Status.get(path(module.__struct__.__meta__), id)
+  end
+
+  def delete(module, id) do
+    path = path(module.__struct__.__meta__)
+
+    all =
+      Five9s.S3.delete(path, id)
+      |> Enum.map(fn r -> struct(module, r) end)
+
+    Five9s.Status.set(path, all)
+
+    {:ok}
   end
 
   @chars "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
@@ -134,5 +151,20 @@ defmodule Five9s.Repo do
       end
     end)
     |> Enum.reject(fn m -> is_nil(m) end)
+  end
+
+  defmodule SchemaError do
+    def validation_message(error) do
+      keys = Keyword.keys(error)
+      message_for(keys, error, [])
+    end
+
+    def message_for([k | t], kl, errors) do
+      {message, _} = kl[k]
+      message_for(t, kl, ["#{k} #{message}" | errors])
+    end
+
+    def message_for([], _, errors), do: Enum.reverse(errors) |> Enum.join(", ")
+    defexception message: "Schema Error"
   end
 end

@@ -15,8 +15,8 @@ defmodule Five9s.S3 do
     GenServer.call(__MODULE__, {:insert, path, object})
   end
 
-  def delete(path, object) do
-    GenServer.call(__MODULE__, {:delete, path, object})
+  def delete(path, record_id) do
+    GenServer.call(__MODULE__, {:delete, path, record_id})
   end
 
   def update(path, record) do
@@ -31,10 +31,11 @@ defmodule Five9s.S3 do
   end
 
   @impl true
-  def handle_call({:delete, path, object}, _from, state) do
+  def handle_call({:delete, path, object_id}, _from, state) do
     current = state[path] || []
-    state = Map.merge(state, %{path => Enum.reject(current, fn c -> c == object end)})
-    {:reply, state, state}
+    remaining = Enum.reject(current, fn c -> c.id == object_id end)
+    state = Map.merge(state, %{path => remaining})
+    {:reply, remaining, state}
   end
 
   @impl true

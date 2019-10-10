@@ -31,4 +31,14 @@ defmodule Five9s.RepoTest do
 
     assert record.name == "Test It"
   end
+
+  test "insert & delete & get nil" do
+    {:ok, record} =
+      Incident.changeset(%Incident{}, %{name: "Test"})
+      |> Repo.insert()
+
+    {:ok} = Repo.delete(Incident, record.id)
+
+    assert Repo.get(Incident, record.id) == nil
+  end
 end
