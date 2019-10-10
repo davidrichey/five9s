@@ -11,7 +11,9 @@ defmodule Five9s.Application do
       # Start the Ecto repository
       # Five9s.Repo,
       # Start the endpoint when the application starts
-      Five9sWeb.Endpoint
+      Five9sWeb.Endpoint,
+      {Five9s.S3, name: Five9s.S3},
+      Five9s.Status
       # Starts a worker by calling: Five9s.Worker.start_link(arg)
       # {Five9s.Worker, arg},
     ]

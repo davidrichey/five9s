@@ -1,0 +1,5 @@
+<%= for resource <- @resources do %>
+  <div class="">
+    <%= link(resource.name, to: "/admin/incidents/#{resource.id}") %>
+  </div>
+<% end %>

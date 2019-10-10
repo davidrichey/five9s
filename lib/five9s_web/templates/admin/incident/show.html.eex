@@ -1,0 +1,1 @@
+<%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.IncidentLive, session: %{resource: @resource}) %>
