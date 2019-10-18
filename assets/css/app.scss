@@ -19,6 +19,7 @@ $lightgray: lightgray;
 
 .incident {
   padding: 8px 16px;
+  margin: 0px 0px 8px 0px;
   border: 1px solid $lightgray;
   border-top: 4px solid $orange;
   &.resolved { border-top: 4px solid $green; }
@@ -30,4 +31,13 @@ $lightgray: lightgray;
   .updates {
     padding: 8px 0px;
   }
+}
+
+
+h1, h2 {
+  margin: 40px 0px 4px 0px;
+}
+
+.about {
+  color: $gray;
 }

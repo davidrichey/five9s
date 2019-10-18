@@ -1,7 +1,7 @@
-<div class="incident <%= if @resource.resolution[:id], do: "resolved", else: "open" %>">
+<div class="incident <%= if is_nil(@resource.resolution), do: "open", else: "resolved" %>">
   <div class="name"><%= @resource.name %></div>
   <div class="description"><%= @resource.description %></div>
-  <%= if @resource.resolution[:id] do %>
+  <%= if !is_nil(@resource.resolution) do %>
     <div class="resolution">Resolved at <%= @resource.resolution.created_at %>: <%= @resource.resolution.description %></div>
   <% end %>
   <%= if @resource.updates |> Enum.count() > 0 do %>
@@ -16,8 +16,6 @@
   <% end %>
 
   <div class="actions">
-
-
     <form action="#" phx-submit="update">
       <%= text_input :update, :description, placeholder: "Update...." %>
       <%= submit "Update", phx_disable_with: "Updating..." %>

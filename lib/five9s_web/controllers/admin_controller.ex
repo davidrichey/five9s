@@ -10,7 +10,7 @@ defmodule Five9sWeb.AdminController do
   def create(conn, params) do
     {module, resource} = module(conn)
 
-    {:ok, record} =
+    {:ok, _record} =
       module.changeset(struct(module), params[Inflex.singularize(resource)])
       |> Five9s.Repo.insert()
 
@@ -20,14 +20,13 @@ defmodule Five9sWeb.AdminController do
   end
 
   def index(conn, _params) do
-    {_module, resource} = module(conn)
-    render(conn, "index.html", resources: Five9s.Status.all(resource))
+    {module, _resource} = module(conn)
+    render(conn, "index.html", resources: Five9s.Repo.all(module))
   end
 
   def show(conn, _params) do
-    {_module, resource} = module(conn)
-
-    render(conn, "show.html", resource: Five9s.Status.get(resource, conn.path_params["id"]))
+    {module, _resource} = module(conn)
+    render(conn, "show.html", resource: Five9s.Repo.get(module, conn.path_params["id"]))
   end
 
   defp module(conn) do

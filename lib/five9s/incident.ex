@@ -11,15 +11,36 @@ defmodule Five9s.Incident do
     field :name
     field :description
     field :updates, {:array, Ecto.Types.Update}, default: []
-    field :resolution, Ecto.Types.Update, default: %{}
+    field :resolution, Ecto.Types.Update, default: nil
   end
 
   def changeset(incident, params) do
     incident
-    |> cast(params, [:name, :description, :resolution])
+    |> cast(params, [:name, :description])
+    |> cast_resolution(params)
     |> cast_updates(params)
     |> validate_required([:name])
     |> Five9s.Repo.cast_defaults()
+  end
+
+  def cast_resolution(changeset, params) do
+    case params[:resolution] do
+      nil ->
+        changeset
+
+      %Update{} ->
+        changeset
+
+      resolution ->
+        case Update.changeset(%Update{}, resolution) |> Five9s.Repo.apply() do
+          {:error, error} ->
+            raise Five9s.Repo.SchemaError,
+              message: Five9s.Repo.SchemaError.validation_message(error)
+
+          {:ok, r} ->
+            cast(changeset, %{resolution: r}, [:resolution])
+        end
+    end
   end
 
   def cast_updates(changeset, params) do
@@ -43,7 +64,10 @@ defmodule Five9s.Incident do
         end
       end)
 
-    cast(changeset, %{updates: updates}, [:updates])
+    case updates do
+      [] -> changeset
+      _ -> cast(changeset, %{updates: updates}, [:updates])
+    end
   end
 end
 

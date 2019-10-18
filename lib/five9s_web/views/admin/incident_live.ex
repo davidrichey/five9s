@@ -23,13 +23,12 @@ defmodule Five9sWeb.Admin.IncidentLive do
   end
 
   def handle_event("resolve", %{"resolution" => %{"description" => desc}}, socket) do
-    {:ok, resolution} =
-      Update.changeset(%Update{}, %{description: desc})
-      |> Five9s.Repo.as_map()
+    record = Five9s.Repo.get(Five9s.Incident, socket.assigns.resource.id)
 
-    resource = socket.assigns.resource
-    resource = Map.merge(resource, %{resolution: resolution})
-    Five9s.S3.update("incidents", resource)
-    {:noreply, assign(socket, :resource, resource)}
+    {:ok, record} =
+      Five9s.Incident.changeset(record, %{resolution: %{description: desc}})
+      |> Five9s.Repo.update()
+
+    {:noreply, assign(socket, :resource, record)}
   end
 end

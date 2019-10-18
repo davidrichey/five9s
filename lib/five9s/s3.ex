@@ -10,6 +10,10 @@ defmodule Five9s.S3 do
     {:ok, %{}}
   end
 
+  def all(path) do
+    GenServer.call(__MODULE__, {:all, path})
+  end
+
   def insert(path, record) do
     object = record |> Map.from_struct() |> Map.drop([:__meta__])
     GenServer.call(__MODULE__, {:insert, path, object})
@@ -22,6 +26,12 @@ defmodule Five9s.S3 do
   def update(path, record) do
     object = record |> Map.from_struct() |> Map.drop([:__meta__])
     GenServer.call(__MODULE__, {:update, path, object})
+  end
+
+  @impl true
+  def handle_call({:all, path}, _from, state) do
+    current = state[path] || []
+    {:reply, current, state}
   end
 
   @impl true
@@ -48,8 +58,6 @@ defmodule Five9s.S3 do
         index -> current |> List.replace_at(index, object)
       end
 
-    Five9s.Status.set(path, updated)
-
-    {:reply, updated, state}
+    {:reply, updated, Map.merge(state, %{path => updated})}
   end
 end

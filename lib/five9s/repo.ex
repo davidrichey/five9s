@@ -1,9 +1,45 @@
 defmodule Five9s.Repo do
-  import Ecto.Changeset
+  import Ecto.{Changeset, Query}
 
-  def all(module, _query \\ %{}) do
+  def all(query = %Ecto.Query{}) do
+    %_{source: {_, module}} = query.from
+    all = all(module)
+
+    all
+    |> Enum.filter(fn record ->
+      Enum.map(query.wheres, fn where ->
+        case where do
+          %_{expr: {:==, _, _}, params: params} ->
+            [{value, {_, key}} | _] = params
+            Map.get(record, key) == value
+
+          %_{expr: {:is_nil, _, [{{_, _, [_, field]}, _, _}]}} ->
+            is_nil(Map.get(record, field))
+
+          %_{expr: {:not, _, [{:is_nil, _, [{{_, _, [_, field]}, _, _}]}]}} ->
+            !is_nil(Map.get(record, field))
+
+          %{expr: {:>, [], [{{_, _, [{_, _, _}, field]}, _, _}, _]}, params: [{greater, {_, _}}]} ->
+            case greater do
+              %DateTime{} -> DateTime.compare(greater, Map.get(record, field)) == :gt
+              _ -> greater < Map.get(record, field)
+            end
+        end
+      end)
+      |> Enum.uniq() == [true]
+    end)
+  end
+
+  def all(module) do
     path = path(module.__struct__.__meta__)
-    Five9s.Status.all(path)
+
+    Five9s.S3.all(path)
+    |> Enum.map(fn json -> struct(module, json) end)
+  end
+
+  def get(module, id) do
+    all(from r in module, where: r.id == ^id)
+    |> Enum.at(0)
   end
 
   def insert(changeset, _opts \\ []) do
@@ -16,11 +52,8 @@ defmodule Five9s.Repo do
         path = path(record.__meta__)
         module = record.__struct__
 
-        all =
-          Five9s.S3.insert(path, record)
-          |> Enum.map(fn r -> struct(module, r) end)
-
-        Five9s.Status.set(path, all)
+        Five9s.S3.insert(path, record)
+        |> Enum.map(fn r -> struct(module, r) end)
 
         {:ok, record}
     end
@@ -40,14 +73,8 @@ defmodule Five9s.Repo do
           Five9s.S3.update(path, record)
           |> Enum.map(fn r -> struct(module, r) end)
 
-        Five9s.Status.set(path, all)
-
         {:ok, record}
     end
-  end
-
-  def get(module, id) do
-    Five9s.Status.get(path(module.__struct__.__meta__), id)
   end
 
   def delete(module, id) do
@@ -56,8 +83,6 @@ defmodule Five9s.Repo do
     all =
       Five9s.S3.delete(path, id)
       |> Enum.map(fn r -> struct(module, r) end)
-
-    Five9s.Status.set(path, all)
 
     {:ok}
   end

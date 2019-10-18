@@ -1,5 +1,6 @@
 defmodule Five9sWeb.StatusLive do
   use Phoenix.LiveView
+  import Ecto.Query
 
   def render(assigns) do
     ~L"""
@@ -13,16 +14,17 @@ defmodule Five9sWeb.StatusLive do
   end
 
   def mount(%{}, socket) do
-    # if connected?(socket), do: :timer.send_interval(10_000, self(), :update)
+    if connected?(socket), do: :timer.send_interval(10_000, self(), :check)
 
-    {:ok, assign(socket, status: "ok")}
+    {:ok, assign(socket, status: status())}
   end
 
-  # def handle_info(:update, socket) do
-  #   {:noreply, assign(socket, :temperature, 101)}
-  # end
+  def handle_info(:check, socket) do
+    {:noreply, assign(socket, :status, status())}
+  end
 
-  def handle_event("inc", _value, socket) do
-    {:noreply, assign(socket, temperature: socket.assigns.temperature + 5)}
+  defp status do
+    open_incidents = Five9s.Repo.all(from i in Five9s.Incident, where: is_nil(i.resolution))
+    if Enum.count(open_incidents) == 0, do: "ok", else: "degraded"
   end
 end
