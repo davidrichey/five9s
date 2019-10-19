@@ -33,5 +33,9 @@ defmodule Five9sWeb.Router do
     post "/incidents", Admin.IncidentController, :create
     get "/incidents", Admin.IncidentController, :index
     get "/incidents/:id", Admin.IncidentController, :show
+
+    get "/services/new", Admin.ServiceController, :new
+    post "/services", Admin.ServiceController, :create
+    get "/services", Admin.ServiceController, :index
   end
 end

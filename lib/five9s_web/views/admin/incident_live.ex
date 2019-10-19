@@ -1,8 +1,6 @@
 defmodule Five9sWeb.Admin.IncidentLive do
   use Phoenix.LiveView
 
-  alias Five9s.Incident.Update
-
   def mount(session, socket) do
     {:ok,
      assign(socket, %{

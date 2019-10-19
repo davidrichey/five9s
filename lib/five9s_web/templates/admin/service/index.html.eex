@@ -1,0 +1,5 @@
+<%= for resource <- @resources do %>
+  <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.ServiceLive, session: %{admin: true, resource: resource}) %>
+<% end %>
+
+<%= button("Add Service", to: "/admin/services/new", method: "get") %>

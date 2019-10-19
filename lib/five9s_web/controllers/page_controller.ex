@@ -14,10 +14,15 @@ defmodule Five9sWeb.PageController do
           where: i.created_at > ^days_ago
       )
 
+    services =
+      Five9s.Repo.all(Five9s.Service)
+      |> Enum.sort_by(fn s -> s.name end)
+
     render(conn, "index.html",
       days: days,
       open_incidents: open_incidents,
-      past_incidents: past_incidents
+      past_incidents: past_incidents,
+      services: services
     )
   end
 end

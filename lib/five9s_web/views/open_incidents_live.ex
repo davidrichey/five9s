@@ -16,6 +16,7 @@ defmodule Five9sWeb.OpenIncidentsLive do
             <%= if incident.updates |> Enum.count() > 0 do %>
               <div class="updates">
                 <%= for update <- incident.updates do %>
+                  <div class="updateHeader">Update</div>
                   <div class="update">
                     <%= update.description %>
                     <%= update.updated_at %>
