@@ -1,1 +1,1 @@
-<%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.IncidentLive, session: %{resource: @resource}) %>
+<%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.IncidentLive, session: %{admin: true, resource: @resource}) %>

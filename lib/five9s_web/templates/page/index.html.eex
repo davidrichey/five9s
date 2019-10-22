@@ -20,24 +20,9 @@
 <div class="incidents">
   <%= if assigns[:past_incidents] |> Enum.count() > 0 do %>
     <%= for incident <- assigns[:past_incidents] do %>
-      <div class="incident <%= if is_nil(incident.resolution), do: "open", else: "resolved" %>">
-        <div class="name"><%= incident.name %></div>
-        <div class="description"><%= incident.description %></div>
-        <%= if !is_nil(incident.resolution) do %>
-          <div class="resolution">Resolved at <%= incident.resolution.created_at %>: <%= incident.resolution.description %></div>
-        <% end %>
-        <%= if incident.updates |> Enum.count() > 0 do %>
-          <div class="updates">
-            <%= for update <- incident.updates do %>
-              <div>Update</div>
-              <div class="update">
-                <%= update.description %>
-                <%= update.updated_at %>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
+      <%= link to: "/incidents/#{incident.id}" do %>
+        <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.IncidentLive, id: incident.id, session: %{admin: false, resource: incident}) %>
+      <% end %>
     <% end %>
   <% else %>
     No incidents in the past <%= @days %> days

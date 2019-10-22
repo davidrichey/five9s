@@ -18,6 +18,7 @@ $lightgray: lightgray;
 
 
 .incident {
+  color: black;
   padding: 8px 16px;
   margin: 0px 0px 8px 0px;
   border: 1px solid $lightgray;
@@ -27,13 +28,22 @@ $lightgray: lightgray;
   .name {
     font-size: 15px;
   }
-
-  .updates {
-    padding: 8px 0px;
-    .updateHeader {
+  .resolution {
+    .heading {
       color: $gray;
       font-weight: 400;
     }
+  }
+  .updates {
+    padding: 8px 0px;
+    .heading {
+      color: $gray;
+      font-weight: 400;
+    }
+  }
+  .timestamp {
+    font-size: 10px;
+    color: $gray;
   }
 }
 
@@ -61,6 +71,9 @@ $lightgray: lightgray;
 h1, h2 {
   margin: 40px 0px 16px 0px;
   border-bottom: 1px solid $lightgray;
+}
+h3, h4, h5 {
+  margin: 8px 0px 8px 0px;
 }
 
 .about {

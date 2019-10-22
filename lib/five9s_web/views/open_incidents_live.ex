@@ -7,31 +7,16 @@ defmodule Five9sWeb.OpenIncidentsLive do
       <%= if assigns[:open_incidents] |> Enum.count() > 0 do %>
         <h2>Open Incidents</h2>
         <%= for incident <- assigns[:open_incidents] do %>
-          <div class="incident <%= if is_nil(incident.resolution), do: "open", else: "resolved" %>">
-            <div class="name"><%= incident.name %></div>
-            <div class="description"><%= incident.description %></div>
-            <%= if !is_nil(incident.resolution) do %>
-              <div class="resolution">Resolved at <%= incident.resolution.created_at %>: <%= incident.resolution.description %></div>
-            <% end %>
-            <%= if incident.updates |> Enum.count() > 0 do %>
-              <div class="updates">
-                <%= for update <- incident.updates do %>
-                  <div class="updateHeader">Update</div>
-                  <div class="update">
-                    <%= update.description %>
-                    <%= update.updated_at %>
-                  </div>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
+          <%= Phoenix.HTML.Link.link to: "/incidents/#{incident.id}" do %>
+            <%= live_render(@socket, Five9sWeb.IncidentLive, id: incident.id, session: %{admin: false, resource: incident}) %>
+          <% end %>
         <% end %>
       <% end %>
     """
   end
 
   def mount(%{}, socket) do
-    if connected?(socket), do: :timer.send_interval(10_000, self(), :check)
+    if connected?(socket), do: :timer.send_interval(60_000, self(), :check)
     {:ok, assign(socket, open_incidents: open_incidents())}
   end
 
