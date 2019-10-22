@@ -4,6 +4,7 @@ defmodule Five9sWeb.Admin.IncidentLive do
   def mount(session, socket) do
     {:ok,
      assign(socket, %{
+       admin: session[:admin] || false,
        resource: session.resource
      })}
   end

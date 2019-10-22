@@ -1,29 +1,36 @@
 <div class="incident <%= if is_nil(@resource.resolution), do: "open", else: "resolved" %>">
   <div class="name"><%= @resource.name %></div>
   <div class="description"><%= @resource.description %></div>
+  <div class="timestamp"><%= @resource.created_at %></div>
+
   <%= if !is_nil(@resource.resolution) do %>
-    <div class="resolution">Resolved at <%= @resource.resolution.created_at %>: <%= @resource.resolution.description %></div>
+    <div class="resolution"><span class="heading">Resolved</span>: <%= @resource.resolution.description %></div>
+    <div class="timestamp"><%= @resource.resolution.created_at %></div>
   <% end %>
   <%= if @resource.updates |> Enum.count() > 0 do %>
     <div class="updates">
+      <div class="heading">Updates</div>
       <%= for update <- @resource.updates do %>
         <div class="update">
           <%= update.description %>
           <%= update.updated_at %>
         </div>
+        <div class="timestamp"><%= update.created_at %></div>
       <% end %>
     </div>
   <% end %>
 
   <div class="actions">
-    <form action="#" phx-submit="update">
-      <%= textarea :update, :description, placeholder: "Update...." %>
-      <%= submit "Update", phx_disable_with: "Updating..." %>
-    </form>
+    <%= if @admin do %>
+      <form action="#" phx-submit="update">
+        <%= textarea :update, :description, placeholder: "Update...." %>
+        <%= submit "Update", phx_disable_with: "Updating..." %>
+      </form>
 
-    <form action="#" phx-submit="resolve">
-      <%= textarea :resolution, :description, placeholder: "Resolution" %>
-      <%= submit "Resolve", phx_disable_with: "Updating..." %>
-    </form>
+      <form action="#" phx-submit="resolve">
+        <%= textarea :resolution, :description, placeholder: "Resolution" %>
+        <%= submit "Resolve", phx_disable_with: "Updating..." %>
+      </form>
+    <% end %>
   </div>
 </div>

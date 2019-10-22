@@ -23,7 +23,7 @@ defmodule Five9sWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/incidents/:id", Admin.IncidentController, :show
+    get "/incidents/:id", IncidentController, :show
   end
 
   scope "/admin", Five9sWeb do
