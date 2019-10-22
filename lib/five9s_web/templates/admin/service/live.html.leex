@@ -1,0 +1,19 @@
+<div class="service <%= if @resource.status == "ok", do: "statusOK", else: "statusDegraded" %>">
+  <div class="name"><%= @resource.name %></div>
+  <div class="description"><%= @resource.description %></div>
+
+  <div class="status">
+    <%= if @admin do %>
+      <%= form_for @changeset, "#", [phx_change: :status], fn f -> %>
+        <%= select f, :status, ["OK": "ok", "Degraded": "degraded"] %>
+      <% end %>
+    <% else %>
+      <%= if @resource.status == "ok" do %>
+        Operational
+      <% end %>
+      <%= if @resource.status == "degraded" do %>
+        Degraded
+      <% end %>
+    <% end %>
+    </div>
+</div>

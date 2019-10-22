@@ -1,0 +1,13 @@
+<%= form_for @changeset, Routes.service_path(@conn, :create), fn f -> %>
+  <label>
+    Name: <%= text_input f, :name %>
+  </label>
+
+  <label>
+    Description: <%= textarea f, :description %>
+  </label>
+
+  <%= hidden_input f, :status, value: "ok" %>
+
+  <%= submit "Create" %>
+<% end %>

@@ -3,3 +3,5 @@
     <%= link(resource.name, to: "/admin/incidents/#{resource.id}") %>
   </div>
 <% end %>
+
+<%= button("New Incident", to: "/admin/incidents/new", method: "get") %>

@@ -27,7 +27,11 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-config :five9s, timezone: "America/New_York"
+
+config :five9s,
+  name: "Malartu",
+  description:
+    "Malartu provides managers with the answers to the most important questions in your business: How healthy is my business?  Where are we headed? How does that compare to my peers?"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -1,11 +1,19 @@
 <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.StatusLive, session: %{}) %>
 
-<h2>About Malartu</h2>
+<h2>About <%= Application.get_env(:five9s, :name) %></h2>
 <div class="about">
-  Malartu is....
+  <%= Application.get_env(:five9s, :description) %>
 </div>
 
 <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.OpenIncidentsLive, session: %{}) %>
+
+<%= if Enum.count(@services) > 0 do %>
+  <h2>External Services</h2>
+
+  <%= for service <- @services do %>
+    <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.ServiceLive, session: %{admin: false, resource: service}) %>
+  <% end %>
+<% end %>
 
 
 <h2>Past Incidents</h2>
@@ -21,6 +29,7 @@
         <%= if incident.updates |> Enum.count() > 0 do %>
           <div class="updates">
             <%= for update <- incident.updates do %>
+              <div>Update</div>
               <div class="update">
                 <%= update.description %>
                 <%= update.updated_at %>

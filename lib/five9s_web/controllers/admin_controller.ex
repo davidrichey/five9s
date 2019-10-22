@@ -32,6 +32,7 @@ defmodule Five9sWeb.AdminController do
   defp module(conn) do
     case conn.request_path |> String.split("/", trim: true) |> Enum.drop(1) do
       ["incidents" | _] -> {Five9s.Incident, "incidents"}
+      ["services" | _] -> {Five9s.Service, "services"}
     end
   end
 end
