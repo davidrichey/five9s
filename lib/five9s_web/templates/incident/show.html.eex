@@ -1,1 +1,3 @@
+<h2>Incident</h2>
+
 <%= Phoenix.LiveView.live_render(@conn, Five9sWeb.Admin.IncidentLive, session: %{admin: false, resource: @incident}) %>
