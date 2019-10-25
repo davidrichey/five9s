@@ -35,6 +35,7 @@ defmodule Five9sWeb.Router do
 
     get "/incidents/:id", IncidentController, :show
     get "/incidents.json", IncidentController, :index
+    get "/status.json", PageController, :status
     get "/services.json", ServiceController, :index
   end
 
