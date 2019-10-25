@@ -19,11 +19,24 @@ defmodule Five9sWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
   scope "/", Five9sWeb do
     pipe_through :browser
 
     get "/", PageController, :index
     get "/incidents/:id", IncidentController, :show
+  end
+
+  scope "/", Five9sWeb do
+    pipe_through :api
+
+    get "/incidents/:id", IncidentController, :show
+    get "/incidents.json", IncidentController, :index
+    get "/status.json", PageController, :status
+    get "/services.json", ServiceController, :index
   end
 
   scope "/admin", Five9sWeb do

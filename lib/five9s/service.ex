@@ -3,6 +3,7 @@ defmodule Five9s.Service do
   import Ecto.Changeset
 
   @primary_key false
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "services" do
     field :id
     field :created_at, :utc_datetime

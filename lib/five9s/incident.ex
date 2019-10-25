@@ -4,6 +4,7 @@ defmodule Five9s.Incident do
   alias Five9s.Incident.Update
 
   @primary_key false
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "incidents" do
     field :id
     field :created_at, :utc_datetime

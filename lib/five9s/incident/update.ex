@@ -3,6 +3,7 @@ defmodule Five9s.Incident.Update do
   import Ecto.Changeset
 
   @primary_key false
+  @derive {Jason.Encoder, except: [:__meta__]}
   schema "" do
     field :id
     field :created_at, :utc_datetime

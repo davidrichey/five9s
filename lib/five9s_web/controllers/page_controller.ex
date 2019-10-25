@@ -25,4 +25,10 @@ defmodule Five9sWeb.PageController do
       services: services
     )
   end
+
+  def status(conn, _) do
+    open_incidents = Five9s.Repo.all(from i in Five9s.Incident, where: is_nil(i.resolution))
+    status = if Enum.count(open_incidents) == 0, do: "ok", else: "degraded"
+    render(conn, "status.json", %{status: status})
+  end
 end
