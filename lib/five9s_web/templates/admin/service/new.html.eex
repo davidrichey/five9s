@@ -7,6 +7,10 @@
     Description: <%= textarea f, :description %>
   </label>
 
+  <label>
+    URL: <%= text_input f, :url %>
+  </label>
+
   <%= hidden_input f, :status, value: "ok" %>
 
   <%= submit "Create" %>

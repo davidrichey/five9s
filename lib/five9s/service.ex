@@ -12,11 +12,12 @@ defmodule Five9s.Service do
     field :description
     field :status
     field :source, :map
+    field :url
   end
 
   def changeset(service, params) do
     service
-    |> cast(params, [:name, :description, :source, :status])
+    |> cast(params, [:name, :description, :source, :status, :url])
     |> Five9s.Repo.cast_defaults()
   end
 end

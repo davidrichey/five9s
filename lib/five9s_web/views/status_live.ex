@@ -14,7 +14,7 @@ defmodule Five9sWeb.StatusLive do
   end
 
   def mount(%{}, socket) do
-    if connected?(socket), do: :timer.send_interval(10_000, self(), :check)
+    if connected?(socket), do: :timer.send_interval(30_000, self(), :check)
 
     {:ok, assign(socket, status: status())}
   end
